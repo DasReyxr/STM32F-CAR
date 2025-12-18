@@ -1,0 +1,10 @@
+../Core/Src/conf.c:58:6:CAR_Leds	3
+../Core/Src/conf.c:71:6:CAR_Speed	2
+../Core/Src/conf.c:78:6:CAR_Front	1
+../Core/Src/conf.c:82:6:CAR_Back	1
+../Core/Src/conf.c:87:6:CAR_Direction	3
+../Core/Src/conf.c:95:6:confRCC	1
+../Core/Src/conf.c:101:6:confGPIO	1
+../Core/Src/conf.c:120:6:confTIMER	1
+../Core/Src/conf.c:162:6:delay_ms	3
+../Core/Src/conf.c:169:6:config	1
