@@ -31,7 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SIZE_TX_BUF 7
+#define SIZE_TX_BUF 1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -42,7 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
 nrf24 nrfTx;
-uint8_t tx_data[SIZE_TX_BUF]={0x01,0x02,0x03,0x04,0x05,0x06,0x07};
+uint8_t tx_data[SIZE_TX_BUF]={"1"};
 uint8_t txAddr[] = {0xEA, 0xDD, 0xCC, 0xBB, 0xAA};
 /* USER CODE BEGIN PV */
 
@@ -121,10 +121,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(NRF24_Available(&nrfTx, 0) == 1)
-	  		{
-		  NRF24_Transmit(&nrfTx, tx_data, SIZE_TX_BUF);
-	  		}
+	  NRF24_Transmit(&nrfTx, tx_data, SIZE_TX_BUF);
+	  HAL_Delay(100);  // Wait 100ms between transmissions
   }
   /* USER CODE END 3 */
 }

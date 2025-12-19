@@ -39,7 +39,8 @@ int main(void)
   nrfRx.CSN_port = GPIOB;
   nrfRx.CSN_pin = GPIO_PIN_12; //Pendiente
   nrfRx.IRQ_port=GPIOB;
-  nrfRx.IRQ_pin = GPIO_PIN_11;
+  nrfRx.IRQ_pin =
+  GPIO_PIN_11;
 
   nrfRx.hSPIx = &hspi2;
 	NRF24_Init(&nrfRx);
