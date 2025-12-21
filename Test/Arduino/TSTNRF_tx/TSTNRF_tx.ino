@@ -1,21 +1,28 @@
 #include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
 
-RF24 radio(7,8);
-
-const byte address[6] = "00001";
+const int CSN = 8;
 
 void setup() {
-  radio.begin();
-  radio.openWritingPipe(address);
-  radio.setPALevel(RF24_PA_MAX);
-  radio.setDataRate(RF24_250KBPS);
-  radio.stopListening();
+  Serial.begin(9600);
+  pinMode(53, OUTPUT);
+  pinMode(CSN, OUTPUT);
+  digitalWrite(CSN, HIGH);
+  
+  SPI.begin();
+  SPI.setClockDivider(SPI_CLOCK_DIV2);
+  
+  delay(100);
+  
+  // Read CONFIG register (should be 0x08 or 0x09)
+  digitalWrite(CSN, LOW);
+  byte status = SPI.transfer(0x00);  // Read CONFIG
+  byte config = SPI.transfer(0x00);
+  digitalWrite(CSN, HIGH);
+  
+  Serial.print("Status: ");
+  Serial.println(status, HEX);
+  Serial.print("CONFIG: ");
+  Serial.println(config, HEX);
 }
 
-void loop() {
-  const char text[] = "nrftest";
-  radio.write(&text, sizeof(text));
-  delay(2000);
-}
+void loop() {}

@@ -1,28 +1,20 @@
 #include <SPI.h>
-#include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7,8);
-
-const int buzzer = 2;
-const byte address[6] = "00001";
+RF24 radio(9, 10);
 
 void setup() {
-  // put your setup code here, to run once:
+  pinMode(53, OUTPUT);  // Mega: SS pin must be OUTPUT for SPI master
   Serial.begin(9600);
-  radio.begin();
-  radio.openReadingPipe(0,address);
-  radio.setPALevel(RF24_PA_MAX);
-  radio.setDataRate(RF24_250KBPS);
-  radio.startListening();
-}
+  while (!Serial);
 
-void loop() {
-  char text[32] = "";
-  
-  if (radio.available()) {
-    radio.read(&text, sizeof(text));
-    String transData = String(text);
-    Serial.println("Received: " + transData);    
+  radio.begin();
+
+  if (radio.isChipConnected()) {
+    Serial.println("NRF24L01 CONNECTED");
+  } else {
+    Serial.println("NRF24L01 NOT DETECTED");
   }
 }
+
+void loop() {}
