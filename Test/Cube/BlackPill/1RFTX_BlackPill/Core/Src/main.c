@@ -23,6 +23,12 @@ B6  SW Fw
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+typedef struct {
+    uint8_t cmd;
+    uint8_t speed;
+    float angle;
+} RF_Data;
+
 #include "NRF24.h"
 #include "NRF24_reg_addresses.h"
 /* USER CODE END Includes */
@@ -34,7 +40,7 @@ B6  SW Fw
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define PLD_SIZE 1
+#define PLD_SIZE sizeof(RF_Data)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -44,16 +50,17 @@ B6  SW Fw
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
-uint8_t dataTx[PLD_SIZE];
+float dataTx[PLD_SIZE];
 
-uint8_t addrTx[5]={'c','a','n','a','l'};
 
+uint8_t addrTx[4]="juan";
+#define PI 3.14159265
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 int main(void)
 {
-
+  RF_Data dataTx;
   HAL_Init();
 
   SystemClock_Config();
@@ -71,23 +78,29 @@ int main(void)
   	nrf24_open_tx_pipe(addrTx);
   	nrf24_open_rx_pipe(0,addrTx);
   	nrf24_stop_listen();
-
+    
+  uint8_t cmd =0;
   /* USER CODE END 2 */
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if(GPIOB->IDR & (1<<7)){ // Si el boton BACK esta presionado
-    	dataTx[0] = 0x01;
-    	nrf24_transmit(dataTx,sizeof(dataTx));
-    }
-    if(GPIOB->IDR & (1<<6)){ // Si el boton FW esta presionado
-    	dataTx[0] = 0x02;
-    	nrf24_transmit(dataTx,sizeof(dataTx));
-    }
+    if(GPIOB->IDR & (1<<7)) // Si el boton BACK esta presionado
+    	cmd = 0x01;
+    if(GPIOB->IDR & (1<<6)) // Si el boton FW esta presionado
+    	cmd = 0x02;
+    if(GPIOB->IDR & (1<<5)) // Si el boton FW esta presionado
+    	cmd = 0x03;
 
-	  HAL_Delay(15);  
+    float angle = PI/8;
+    uint8_t speed = 50;
+    dataTx.cmd = cmd;
+    dataTx.angle = angle;
+    dataTx.speed = speed;
+    nrf24_transmit((uint8_t*)&dataTx, sizeof(dataTx));
+	  
+    HAL_Delay(15);  
   }
   /* USER CODE END 3 */
 }
@@ -214,6 +227,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BACK_GPIO_Port, &GPIO_InitStruct);
+
+   /*Configure GPIO pin : BACK_Pin */
+  GPIO_InitStruct.Pin = 5;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(BACK_GPIO_Port, &GPIO_InitStruct);
+
+
+
+
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
