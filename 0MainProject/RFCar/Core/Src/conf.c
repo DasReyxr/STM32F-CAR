@@ -92,7 +92,9 @@ void CAR_Direction(float angle){//HAY QUE LIMITAR EL RANGO DE ANGULOS CON UN IF
         angle = PI/4;
 
     uint8_t mangol =101 + (uint8_t)(40*angle+20*PI)/PI;
-    TIM3->CCR2= mangol;
+    TIM3->CCR2= 140;
+    		//mangol;
+
 }
 
 /*----- Configuration -----*/
@@ -124,8 +126,11 @@ void confTIMER(void)
     1 ms -90
 
     20 ms  50hz PERIOD
+    8 MHz Prescaler 99 -> 80 KHz
+    
+    TIM3->ARR  =1599; // 80KHz/50Hz = 1600
+    
     */
-//    TIM3->ARR  =1599; /*8k/50*/
 
     TIM3->CCR2= 120;//1600*1.5/20 => 120  7.5% 0°
   //  TIM3->CR1 |= (1<<0);

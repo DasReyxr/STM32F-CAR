@@ -114,6 +114,10 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); // Start PWM for motor channel 1
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2); // Start PWM for motor channel 2
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); // Start PWM for servo
+
   csn_high();
   nrf24_init();
   nrf24_tx_pwr(_0dbm );
