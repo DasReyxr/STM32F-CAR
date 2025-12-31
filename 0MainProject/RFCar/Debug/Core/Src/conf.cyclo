@@ -2,9 +2,9 @@
 ../Core/Src/conf.c:68:6:CAR_Speed	2
 ../Core/Src/conf.c:75:6:CAR_Front	1
 ../Core/Src/conf.c:79:6:CAR_Back	1
-../Core/Src/conf.c:88:6:CAR_Direction	3
-../Core/Src/conf.c:101:6:confRCC	1
-../Core/Src/conf.c:107:6:confGPIO	1
-../Core/Src/conf.c:118:6:confTIMER	1
-../Core/Src/conf.c:146:6:delay_ms	3
-../Core/Src/conf.c:153:6:config	1
+../Core/Src/conf.c:88:6:CAR_Direction	1
+../Core/Src/conf.c:105:6:confRCC	1
+../Core/Src/conf.c:111:6:confGPIO	1
+../Core/Src/conf.c:122:6:confTIMER	1
+../Core/Src/conf.c:150:6:delay_ms	3
+../Core/Src/conf.c:157:6:config	1

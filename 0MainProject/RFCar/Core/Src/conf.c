@@ -86,14 +86,18 @@ angle should varie between -PI/4 to PI/4  (-45 to 45 degrees)
 
 */
 void CAR_Direction(float angle){//HAY QUE LIMITAR EL RANGO DE ANGULOS CON UN IF
+    /*
     if(angle < -1*PI/4)
         angle = -PI/4;
     if (angle > PI/4)
         angle = PI/4;
 
     uint8_t mangol =101 + (uint8_t)(40*angle+20*PI)/PI;
-    TIM3->CCR2= 140;
-    		//mangol;
+
+    TIM3->CCR2= (mangol<<1);
+*/
+    TIM3->CCR2= (uint16_t)(angle);
+    //mangol;
 
 }
 
@@ -132,7 +136,7 @@ void confTIMER(void)
     
     */
 
-    TIM3->CCR2= 120;//1600*1.5/20 => 120  7.5% 0°
+    TIM3->CCR2= 240;//1600*1.5/20 => 120  7.5% 0°
   //  TIM3->CR1 |= (1<<0);
 
     /*

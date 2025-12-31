@@ -117,7 +117,6 @@ int main(void)
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); // Start PWM for motor channel 1
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2); // Start PWM for motor channel 2
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); // Start PWM for servo
-
   csn_high();
   nrf24_init();
   nrf24_tx_pwr(_0dbm );
@@ -157,7 +156,23 @@ int main(void)
     {
     case 1: CAR_Front(); break;
     case 2: CAR_Back(); break;
-    case 3: CAR_Direction(rxData.angle); break;
+    case 3: 
+    /*
+    160 - 400
+    0     180
+
+    for 45 deg = 220
+    for 135 deg = 340
+    */
+/* 
+*/
+    uint16_t x[3]={160,220,380};
+  
+      for(int i=0;i<sizeof(x);i++){
+          CAR_Direction(x[i]);
+          HAL_Delay(1000);
+      }        
+          break;
     case 4: CAR_Speed(rxData.speed); break;
     case 0x27: // neutral CAR_Speed(0); break;
     default: break;
@@ -316,7 +331,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 99;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1599;
+  htim3.Init.Period = 3199;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
