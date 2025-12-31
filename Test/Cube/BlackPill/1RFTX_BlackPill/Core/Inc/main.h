@@ -53,6 +53,10 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+extern I2C_HandleTypeDef hi2c1;
+/* USER CODE END EFP */
+/* USER CODE BEGIN Private defines */
+/* USER CODE END Private defines */
 
 /* USER CODE END EFP */
 
@@ -68,6 +72,7 @@ void Error_Handler(void);
 #define FW_GPIO_Port GPIOB
 #define BACK_Pin GPIO_PIN_7
 #define BACK_GPIO_Port GPIOB
+
 
 /* USER CODE BEGIN Private defines */
 

@@ -1,0 +1,9 @@
+../Core/Src/mpu6050.c:7:6:MPU6050_Init	16	static
+../Core/Src/mpu6050.c:18:9:MPU6050_Read_Data	24	static
+../Core/Src/mpu6050.c:28:7:MPU6050_Get_Ax	4	static
+../Core/Src/mpu6050.c:33:7:MPU6050_Get_Ay	4	static
+../Core/Src/mpu6050.c:38:7:MPU6050_Get_Az	4	static
+../Core/Src/mpu6050.c:43:7:MPU6050_Get_Gx	4	static
+../Core/Src/mpu6050.c:48:7:MPU6050_Get_Gy	4	static
+../Core/Src/mpu6050.c:53:7:MPU6050_Get_Gz	4	static
+../Core/Src/mpu6050.c:58:7:MPU6050_Get_Temperature	4	static
