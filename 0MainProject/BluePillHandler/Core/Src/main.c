@@ -72,6 +72,7 @@ uint16_t var = 0x00;
 uint8_t speed = 50;
 
 float ax, ay, az, gx, gy, gz, t;
+float ay_ofst;
 char buf_lcd[12];
 
 float roll_rad = 0.0f, roll_deg = 0.0f;
@@ -154,7 +155,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
- HAL_ADC_Start(&hadc1);
+	  HAL_ADC_Start(&hadc1);
 
 	  if(MPU6050_Read_Data() > 0)
 		{
@@ -174,12 +175,19 @@ int main(void)
     for 45 deg = 220
     for 135 deg = 340
     */
+    if (ay < 0.20 && ay > -0.20) ay = 0.0f;
+    ay_ofst=ay+1; // offset from 0 to 2
+    pwm_val = 340 - (ay_ofst * (120.0 / 2.0)); // map 0-2 to 340-220
 
-    if (ax <= 0.9) cmd = 0x01;
-    else cmd = INITIAL_CMD;
-    if (ay < 0.10 && ay > -0.10) ay = 0.0f;
-    ay++; // offset from 0 to 2
-    pwm_val = 340 - (ay * (120.0 / 2.0)); // map 0-2 to 340-220
+
+    if (ax <= -0.8) cmd = 0x01; // Stop
+    else
+    {
+      if(pwm_val > 280) cmd = 0x02; // Right
+      else if(pwm_val < 280) cmd = 0x03; // Left
+      else cmd = INITIAL_CMD;
+    }
+    
     HAL_Delay(200);
 		}
 
