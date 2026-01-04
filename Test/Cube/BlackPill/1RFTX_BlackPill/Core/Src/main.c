@@ -8,7 +8,7 @@
 */
 /*
 A5  SPI1_SCK
-A6  SPI1_MISO
+A6  SPI1_MISo
 A7  SPI1_MOSI
 A8  CSN
 A9  CE
@@ -36,10 +36,21 @@ typedef struct {
 #include "NRF24.h"
 #include "NRF24_reg_addresses.h"
 #include "mpu6050.h"
+
+#include <stdio.h>
+
 /* USER CODE END Includes */
+
+#include <math.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+float ax, ay, az, gx, gy, gz, t;
+char buf_lcd[12];
+
+float roll_rad = 0.0f, roll_deg = 0.0f;
+float deg_offset =0.0f, pwm_val=0.0f, operation =0.0f;
 
 /* USER CODE END PTD */
 
@@ -54,8 +65,8 @@ typedef struct {
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 I2C_HandleTypeDef hi2c1;
+
 SPI_HandleTypeDef hspi1;
 
 /* USER CODE BEGIN PV */
@@ -86,7 +97,15 @@ static void MX_I2C1_Init(void);
   */
 int main(void)
 {
-  RF_Data dataTx;
+
+  /* USER CODE BEGIN 1 */
+    RF_Data dataTx;
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
@@ -105,17 +124,19 @@ int main(void)
   MX_SPI1_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-    csn_high();
-  	nrf24_init();
-  	nrf24_tx_pwr(_0dbm );
-  	nrf24_data_rate(_1mbps);
-  	nrf24_set_crc(en_crc,_1byte);
-  	nrf24_set_channel(100);
-  	nrf24_pipe_pld_size(0,PLD_SIZE);
-  	nrf24_open_tx_pipe(addrTx);
-  	nrf24_open_rx_pipe(0,addrTx);
-  	nrf24_stop_listen();
-    
+  MPU6050_Init();
+  csn_high();
+  nrf24_init();
+  nrf24_tx_pwr(_0dbm );
+  nrf24_data_rate(_1mbps);
+  nrf24_set_crc(en_crc,_1byte);
+  nrf24_set_channel(100);
+  nrf24_pipe_pld_size(0,PLD_SIZE);
+  nrf24_open_tx_pipe(addrTx);
+  nrf24_open_rx_pipe(0,addrTx);
+  nrf24_stop_listen();
+  float deg_gx, deg_gy, deg_gz;
+
   uint8_t cmd =0;
   /* USER CODE END 2 */
 
@@ -126,22 +147,54 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if(GPIOB->IDR & (1<<7)) // Si el boton BACK esta presionado
+	  if(MPU6050_Read_Data() > 0)
+		{
+			ax = MPU6050_Get_Ax();
+			ay = MPU6050_Get_Ay();
+			az = MPU6050_Get_Az();
+			gx = MPU6050_Get_Gx();
+			gy = MPU6050_Get_Gy();
+			gz = MPU6050_Get_Gz();
+			t = MPU6050_Get_Temperature();
+
+      // Calculate roll angle (radians and degrees) using math.h
+      float denominator = sqrt(ax * ax + az * az);
+      roll_rad = atan2(ay, denominator);
+      roll_deg = roll_rad * (180.0f / PI);
+      deg_offset = roll_deg+90;
+      pwm_val = 340-(deg_offset*(2.0/3.0)); // 340 - deg*120/180
+
+
+			sprintf(buf_lcd, "Ax: %0.2f", ax);
+			sprintf(buf_lcd, "Ay: %0.2f", ay);
+			sprintf(buf_lcd, "Az: %0.2f", az);
+			sprintf(buf_lcd, "T: %0.2f", t);
+			//sprintf(buf_lcd, "Gx: %0.2f, deg: %0.2f", gx, deg_gx);
+			//sprintf(buf_lcd, "Gy: %0.2f, deg: %0.2f", gy, deg_gy);
+			//sprintf(buf_lcd, "Gz: %.2f, deg: %0.2f", gz, deg_gz);
+			HAL_Delay(200);
+		}
+
+
+    if(GPIOB->IDR & (1<<12)) // Si el boton BACK esta presionado
     	cmd = 0x01;
-    if(GPIOB->IDR & (1<<6)) // Si el boton FW esta presionado
+    if(GPIOB->IDR & (1<<13)) // Si el boton FW esta presionado
     	cmd = 0x02;
-    if(GPIOB->IDR & (1<<5)) // Si el boton FW esta presionado
+    if(GPIOB->IDR & (1<<14)) // Si el boton FW esta presionado
     	cmd = 0x03;
 
-    float angle = PI/8;
-    uint8_t speed = 50;
+//    float angle = PI/8;
+    uint8_t speed = 27;
     dataTx.cmd = cmd;
-    dataTx.angle = angle;
+    dataTx.angle = pwm_val;
     dataTx.speed = speed;
     nrf24_transmit((uint8_t*)&dataTx, sizeof(dataTx));
 	  
     HAL_Delay(15);  
   }
+
+
+
   /* USER CODE END 3 */
 }
 
@@ -165,7 +218,12 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 72;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -175,12 +233,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -243,7 +301,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -277,6 +335,12 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, CSN_Pin|CE_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pins : PB12 PB13 PB14 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /*Configure GPIO pins : CSN_Pin CE_Pin */
   GPIO_InitStruct.Pin = CSN_Pin|CE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -289,28 +353,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IRQ_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : FW_Pin */
-  GPIO_InitStruct.Pin = FW_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(FW_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : BACK_Pin */
-  GPIO_InitStruct.Pin = BACK_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(BACK_GPIO_Port, &GPIO_InitStruct);
-
-   /*Configure GPIO pin : BACK_Pin */
-  GPIO_InitStruct.Pin = 5;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(BACK_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

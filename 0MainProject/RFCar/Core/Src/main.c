@@ -7,9 +7,9 @@
 -------- 27/12/2025 --------
 */
 /*
-A5  SPI1_SCK
-A6  SPI1_MISO
-A7  SPI1_MOSI
+B13  SPI2_SCK
+B14  SPI2_MISO
+B15  SPI2_MOSI
 A8  CSN
 A9  CE
 A10 IRQ
@@ -61,7 +61,7 @@ TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN PV */
 
 RF_Data rxData;
-uint8_t dataRx[sizeof(RF_Data)];
+float dataRx[sizeof(RF_Data)];
 uint8_t addrRx[4]="juan";
 /* USER CODE END PV */
 
@@ -141,7 +141,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    nrf24_listen();
+ //   nrf24_listen();
     if(nrf24_data_available()){
         nrf24_receive(dataRx, sizeof(dataRx));
         // Copy received bytes into struct
@@ -164,14 +164,9 @@ int main(void)
     for 45 deg = 220
     for 135 deg = 340
     */
-/* 
-*/
-    uint16_t x[3]={160,220,380};
-  
-      for(int i=0;i<sizeof(x);i++){
-          CAR_Direction(x[i]);
-          HAL_Delay(1000);
-      }        
+    	//__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2, (uint16_t)rxData.angle);
+        TIM3->CCR2=(uint16_t)rxData.angle;
+    	HAL_Delay(10);
           break;
     case 4: CAR_Speed(rxData.speed); break;
     case 0x27: // neutral CAR_Speed(0); break;
@@ -333,7 +328,7 @@ static void MX_TIM3_Init(void)
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 3199;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
   {
     Error_Handler();

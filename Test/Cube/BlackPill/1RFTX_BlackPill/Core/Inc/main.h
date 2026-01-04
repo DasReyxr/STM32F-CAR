@@ -55,10 +55,6 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 extern I2C_HandleTypeDef hi2c1;
 /* USER CODE END EFP */
-/* USER CODE BEGIN Private defines */
-/* USER CODE END Private defines */
-
-/* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
 #define CSN_Pin GPIO_PIN_8
@@ -67,15 +63,8 @@ extern I2C_HandleTypeDef hi2c1;
 #define CE_GPIO_Port GPIOA
 #define IRQ_Pin GPIO_PIN_10
 #define IRQ_GPIO_Port GPIOA
-#define IRQ_EXTI_IRQn EXTI15_10_IRQn
-#define FW_Pin GPIO_PIN_6
-#define FW_GPIO_Port GPIOB
-#define BACK_Pin GPIO_PIN_7
-#define BACK_GPIO_Port GPIOB
-
 
 /* USER CODE BEGIN Private defines */
-
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

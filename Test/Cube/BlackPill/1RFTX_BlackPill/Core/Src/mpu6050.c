@@ -1,5 +1,10 @@
-#include "main.h"
+
+
+#include <stdint.h>
 #include "mpu6050.h"
+#include "stm32f4xx_hal.h"
+
+extern I2C_HandleTypeDef hi2c1;
 
 uint8_t data_tx[2];
 uint8_t data_rx[15];
