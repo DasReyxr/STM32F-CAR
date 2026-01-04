@@ -1,28 +1,44 @@
 /* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+/*
+------- Kevin Lara  -------
+--------- Auf Das --------
+-------- Roberto --------
+----------- Car  -----------
+-------- 27/12/2025 --------
+*/
+/*
+A5  SPI1_SCK
+A6  SPI1_MISo
+A7  SPI1_MOSI
+A8  CSN
+A9  CE
+A10 IRQ
+
+
+B7  SW Back
+B6  SW Fw
+*/
+// ------- Main Library -------
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+typedef struct {
+    uint8_t cmd;
+    uint8_t speed;
+    float angle;
+} RF_Data;
+
 #include "NRF24.h"
 #include "NRF24_reg_addresses.h"
+#include "mpu6050.h"
+
+#include <stdio.h>
+#include <math.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,7 +48,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define PLD_SIZE 2
+#define PLD_SIZE sizeof(RF_Data)
+#define INITIAL_CMD 0x27
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,17 +58,36 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
+I2C_HandleTypeDef hi2c1;
+
 SPI_HandleTypeDef hspi2;
 
 /* USER CODE BEGIN PV */
-uint8_t dataTx[PLD_SIZE]={9,7};
-uint8_t addrTx[5]={'c','a','n','a','l'};
+RF_Data txData;
+uint8_t dataTx[sizeof(RF_Data)];
+uint8_t addrTx[4]="juan";
+uint16_t var = 0x00;
+uint8_t speed = 50;
+
+float ax, ay, az, gx, gy, gz, t;
+char buf_lcd[12];
+
+float roll_rad = 0.0f, roll_deg = 0.0f;
+float deg_offset =0.0f, pwm_val=0.0f, operation =0.0f;
+
+uint8_t cmd = INITIAL_CMD;
+#define PI 3.14159265
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI2_Init(void);
+static void MX_ADC1_Init(void);
+static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -69,6 +105,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  RF_Data dataTx;
 
 
   /* USER CODE END 1 */
@@ -92,17 +129,21 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI2_Init();
+  MX_ADC1_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  	  csn_high();
-  	nrf24_init();
-  	nrf24_tx_pwr(_0dbm );
-  	nrf24_data_rate(_1mbps);
-  	nrf24_set_crc(en_crc,_1byte);
-  	nrf24_set_channel(100);
-  	nrf24_pipe_pld_size(0,PLD_SIZE);
-  	nrf24_open_tx_pipe(addrTx);
-  	nrf24_open_rx_pipe(0,addrTx);
-  	nrf24_stop_listen();
+  MPU6050_Init();
+  csn_high();
+  nrf24_init();
+  nrf24_tx_pwr(_0dbm );
+  nrf24_data_rate(_1mbps);
+  nrf24_set_crc(en_crc,_1byte);
+  nrf24_set_channel(100);
+  nrf24_pipe_pld_size(0,PLD_SIZE);
+  nrf24_open_tx_pipe(addrTx);
+  nrf24_open_rx_pipe(0,addrTx);
+  nrf24_stop_listen();
+  float deg_gx, deg_gy, deg_gz;
 
   /* USER CODE END 2 */
 
@@ -113,8 +154,45 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  nrf24_transmit(dataTx,sizeof(dataTx));
-	  HAL_Delay(15);
+ HAL_ADC_Start(&hadc1);
+
+	  if(MPU6050_Read_Data() > 0)
+		{
+			ax = MPU6050_Get_Ax();
+			ay = MPU6050_Get_Ay();
+			az = MPU6050_Get_Az();
+//			gx = MPU6050_Get_Gx();gy = MPU6050_Get_Gy();gz = MPU6050_Get_Gz();t = MPU6050_Get_Temperature();
+
+    /* Angle
+      float denominator = sqrt(ax * ax + az * az);
+      roll_rad = atan2(ay, denominator); // arctan(ay/ \sqrt[ax^2+az^2] )
+      roll_deg = roll_rad * (180.0f / PI);
+      deg_offset = roll_deg+90; // avoid handling negative values on pwm
+      pwm_val = 340-(deg_offset*(2.0/3.0)); // 340 - deg*120/180
+    */
+    /*  
+    for 45 deg = 220
+    for 135 deg = 340
+    */
+
+    if (ax <= -0.9) cmd = 0x01;
+    else cmd = INITIAL_CMD;
+    if (ay < 0.10 && ay > -0.10) ay = 0.0f;
+    ay++; // offset from 0 to 2
+    pwm_val = 340 - (ay * (120.0 / 2.0)); // map 0-2 to 340-220
+    HAL_Delay(200);
+		}
+
+
+
+	  var = HAL_ADC_GetValue(&hadc1);
+    speed = (var * 101)>>12; // /4095 >>12
+    dataTx.cmd = cmd;
+    dataTx.angle = pwm_val;
+    dataTx.speed = speed;
+    nrf24_transmit((uint8_t*)&dataTx, sizeof(dataTx));
+	  
+    HAL_Delay(15);  
   }
   /* USER CODE END 3 */
 }
@@ -127,6 +205,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -155,6 +234,93 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
+
 }
 
 /**
@@ -208,8 +374,8 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, CSN_Pin|CE_Pin, GPIO_PIN_RESET);

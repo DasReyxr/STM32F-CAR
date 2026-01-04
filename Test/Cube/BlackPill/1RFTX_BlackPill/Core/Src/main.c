@@ -38,19 +38,13 @@ typedef struct {
 #include "mpu6050.h"
 
 #include <stdio.h>
+#include <math.h>
 
 /* USER CODE END Includes */
-
-#include <math.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
-float ax, ay, az, gx, gy, gz, t;
-char buf_lcd[12];
-
-float roll_rad = 0.0f, roll_deg = 0.0f;
-float deg_offset =0.0f, pwm_val=0.0f, operation =0.0f;
 
 /* USER CODE END PTD */
 
@@ -65,6 +59,8 @@ float deg_offset =0.0f, pwm_val=0.0f, operation =0.0f;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
@@ -73,6 +69,16 @@ SPI_HandleTypeDef hspi1;
 RF_Data txData;
 uint8_t dataTx[sizeof(RF_Data)];
 uint8_t addrTx[4]="juan";
+uint16_t var = 0x00;
+uint8_t speed = 50;
+
+float ax, ay, az, gx, gy, gz, t;
+char buf_lcd[12];
+
+float roll_rad = 0.0f, roll_deg = 0.0f;
+float deg_offset =0.0f, pwm_val=0.0f, operation =0.0f;
+
+
 #define PI 3.14159265
 
 /* USER CODE END PV */
@@ -82,6 +88,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -123,6 +130,7 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_I2C1_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   MPU6050_Init();
   csn_high();
@@ -147,31 +155,22 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  HAL_ADC_Start(&hadc1);
+
 	  if(MPU6050_Read_Data() > 0)
 		{
 			ax = MPU6050_Get_Ax();
-			ay = MPU6050_Get_Ay();
+//			ay = MPU6050_Get_Ay();
 			az = MPU6050_Get_Az();
-			gx = MPU6050_Get_Gx();
-			gy = MPU6050_Get_Gy();
-			gz = MPU6050_Get_Gz();
-			t = MPU6050_Get_Temperature();
+//			gx = MPU6050_Get_Gx();gy = MPU6050_Get_Gy();gz = MPU6050_Get_Gz();t = MPU6050_Get_Temperature();
 
-      // Calculate roll angle (radians and degrees) using math.h
+
       float denominator = sqrt(ax * ax + az * az);
-      roll_rad = atan2(ay, denominator);
+      roll_rad = atan2(ay, denominator); // arctan(ay/ \sqrt[ax^2+az^2] )
       roll_deg = roll_rad * (180.0f / PI);
-      deg_offset = roll_deg+90;
+      deg_offset = roll_deg+90; // avoid handling negative values on pwm
       pwm_val = 340-(deg_offset*(2.0/3.0)); // 340 - deg*120/180
 
-
-			sprintf(buf_lcd, "Ax: %0.2f", ax);
-			sprintf(buf_lcd, "Ay: %0.2f", ay);
-			sprintf(buf_lcd, "Az: %0.2f", az);
-			sprintf(buf_lcd, "T: %0.2f", t);
-			//sprintf(buf_lcd, "Gx: %0.2f, deg: %0.2f", gx, deg_gx);
-			//sprintf(buf_lcd, "Gy: %0.2f, deg: %0.2f", gy, deg_gy);
-			//sprintf(buf_lcd, "Gz: %.2f, deg: %0.2f", gz, deg_gz);
 			HAL_Delay(200);
 		}
 
@@ -183,8 +182,8 @@ int main(void)
     if(GPIOB->IDR & (1<<14)) // Si el boton FW esta presionado
     	cmd = 0x03;
 
-//    float angle = PI/8;
-    uint8_t speed = 27;
+	  var = HAL_ADC_GetValue(&hadc1);
+    speed = (var * 101)>>12; // /4095 >>12
     dataTx.cmd = cmd;
     dataTx.angle = pwm_val;
     dataTx.speed = speed;
@@ -242,6 +241,58 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**

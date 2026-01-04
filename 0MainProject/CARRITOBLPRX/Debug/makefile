@@ -60,8 +60,8 @@ all: main-build
 main-build: CARRITOBLPRX.elf secondary-outputs
 
 # Tool invocations
-CARRITOBLPRX.elf CARRITOBLPRX.map: $(OBJS) $(USER_OBJS) /home/kevin/STM32CubeIDE/CARRITOBLUEPILL/CARRITOBLPRX/STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "CARRITOBLPRX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/home/kevin/STM32CubeIDE/CARRITOBLUEPILL/CARRITOBLPRX/STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CARRITOBLPRX.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+CARRITOBLPRX.elf CARRITOBLPRX.map: $(OBJS) $(USER_OBJS) C:\Users\dasre\Documents\Knowledge-db\ghFiles\STM32F-CAR\0MainProject\CARRITOBLPRX\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "CARRITOBLPRX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\dasre\Documents\Knowledge-db\ghFiles\STM32F-CAR\0MainProject\CARRITOBLPRX\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CARRITOBLPRX.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
