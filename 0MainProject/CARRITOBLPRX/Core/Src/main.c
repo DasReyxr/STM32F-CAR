@@ -17,6 +17,17 @@ A10 IRQ
 
 B7  SW Back
 B6  SW Fw
+
+
+A2 ADC
+
+B10 TX UART
+B11 RX UART
+
+PC13 BATRED
+PC14 BATYELL
+PC15 BATGREEN
+
 */
 // ------- Main Library -------
 /* USER CODE END Header */
@@ -28,6 +39,8 @@ B6  SW Fw
 #include "NRF24.h"
 #include "NRF24_reg_addresses.h"
 #include "conf.h"
+#include <stdio.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,16 +66,22 @@ typedef struct {
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
+UART_HandleTypeDef huart3;
+
 /* USER CODE BEGIN PV */
 
 RF_Data rxData;
 uint8_t dataRx[sizeof(RF_Data)];
-uint8_t addrRx[4]="juan";
+uint8_t addrRx[5]="juan1";
+uint16_t adc_val;
+uint16_t batery_val;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,6 +90,8 @@ static void MX_GPIO_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_ADC1_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -113,6 +134,8 @@ int main(void)
   MX_SPI2_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_ADC1_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); // Start PWM for motor channel 1
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2); // Start PWM for motor channel 2
@@ -120,14 +143,14 @@ int main(void)
   csn_high();
   nrf24_init();
   nrf24_tx_pwr(_0dbm );
-  nrf24_data_rate(_1mbps);
+  nrf24_data_rate(_2mbps);
   nrf24_set_crc(en_crc,_1byte);
   nrf24_set_channel(100);
   nrf24_pipe_pld_size(0,PLD_SIZE);
-  nrf24_open_tx_pipe(addrRx);
+  //nrf24_open_tx_pipe(addrRx);
   nrf24_open_rx_pipe(0,addrRx);
   nrf24_listen();
-
+  HAL_ADC_Start(&hadc1);
 
 
 
@@ -139,41 +162,59 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  	  	  	  	 char uart_buf[100];
+	                int len = snprintf(uart_buf, sizeof(uart_buf), "bat=%d cmd=%d speed=%d angle=%.2f\r\n", batery_val, rxData.cmd, rxData.speed, rxData.angle);
+	                HAL_UART_Transmit(&huart3, (uint8_t*)uart_buf, len, HAL_MAX_DELAY);
+	                HAL_Delay(100);
+	                adc_val = HAL_ADC_GetValue(&hadc1);
+	                             batery_val = (adc_val*100)>>12;
+	                             if(batery_val<=33){
+	                             HAL_GPIO_WritePin(GPIOC,RED_Pin,GPIO_PIN_SET);
+	                             HAL_GPIO_WritePin(GPIOC,GREEN_Pin,GPIO_PIN_RESET);}
+	                             else if(batery_val>33 && batery_val<=66){
+	                             HAL_GPIO_WritePin(GPIOC,YELLOW_Pin,GPIO_PIN_SET);
+	                             HAL_GPIO_WritePin(GPIOC,RED_Pin,GPIO_PIN_RESET);}
+	                             else {
+	                             HAL_GPIO_WritePin(GPIOC,GREEN_Pin,GPIO_PIN_SET);
+	                             HAL_GPIO_WritePin(GPIOC,YELLOW_Pin,GPIO_PIN_RESET);}
     /* USER CODE BEGIN 3 */
     nrf24_listen();
     if(nrf24_data_available()){
         nrf24_receive(dataRx, sizeof(dataRx));
         // Copy received bytes into struct
         memcpy(&rxData, dataRx, sizeof(RF_Data));
-    } else {
-        rxData.cmd = 0x27; // No command received
-        rxData.angle = 0.0f;
-        rxData.speed = 0;
+        if(rxData.cmd == 0x01)
+            CAR_Stop();
+            else {
+              // --- Direction Motor ---
+              if(rxData.cmd == 0x04)      CAR_Back();
+              else if(rxData.cmd == 0x02)
+            	  CAR_Front();
+              uint16_t cast =(uint16_t)rxData.angle;
+              __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,cast );
+              // --- Speed Motor ---
+              CAR_Speed(rxData.speed);
+              // -- LED  ---
+              if(rxData.cmd == 0x10) GPIOD->ODR ^= (1<<0); // Toggle Light
+              }
+              /*ADC_BAT*/
+
+              /*UART*/
+          /*
+          bat = {battery_val}
+          cmd = {rxData.cmd}
+          speed = {rxData.speed}
+          angle = {rxData.angle}
+          */
     }
 
-    switch (rxData.cmd)
-    {
-    case 1: CAR_Front(); break;
-    case 2: CAR_Back(); break;
-    case 3: 
-    /*
-    160 - 400
-    0     180
 
-    for 45 deg = 220
-    for 135 deg = 340
-    */
-    	uint16_t cast =(uint16_t)rxData.angle;
-    	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,cast );
-        //TIM3->CCR2=(uint16_t)rxData.angle;
-    	//HAL_Delay(10);
-          break;
-    case 4: CAR_Speed(rxData.speed); break;
-    case 0x27: // neutral CAR_Speed(0); break;
-    default: break;
+
     }
-  }
+
+
+
+    
   /* USER CODE END 3 */
 }
 
@@ -185,6 +226,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -213,6 +255,59 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_2;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -356,6 +451,39 @@ static void MX_TIM3_Init(void)
 }
 
 /**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART3_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART3_Init 0 */
+
+  /* USER CODE END USART3_Init 0 */
+
+  /* USER CODE BEGIN USART3_Init 1 */
+
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 9600;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART3_Init 2 */
+
+  /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -368,12 +496,37 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, RED_Pin|YELLOW_Pin|GREEN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, LUZ_Pin|STOP_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LeftFront_Pin|LeftBack_Pin|RightFront_Pin|RightBack_Pin
                           |CSN_Pin|CE_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, LED_DIR1_Pin|LED_DIR2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : RED_Pin YELLOW_Pin GREEN_Pin */
+  GPIO_InitStruct.Pin = RED_Pin|YELLOW_Pin|GREEN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LUZ_Pin STOP_Pin */
+  GPIO_InitStruct.Pin = LUZ_Pin|STOP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LeftFront_Pin LeftBack_Pin RightFront_Pin RightBack_Pin
                            CSN_Pin CE_Pin */
@@ -384,11 +537,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : LED_DIR1_Pin LED_DIR2_Pin */
+  GPIO_InitStruct.Pin = LED_DIR1_Pin|LED_DIR2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /*Configure GPIO pin : IRQ_Pin */
   GPIO_InitStruct.Pin = IRQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IRQ_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure peripheral I/O remapping */
+  __HAL_AFIO_REMAP_PD01_ENABLE();
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

@@ -31,7 +31,27 @@ PB13 SCK
 PB14 MISO
 PB15 MOSI
 
+A2 ADC
+
+B10 TX UART
+B11 RX UART
+
+PC13 BATRED
+PC14 BATYELL
+PC15 BATGREEN
+
+PD0 LUZ
+PD1 STOP
+1Adc detección de batería 
+4Out led direccional/stop/luz
+3Out led inducador bateria
+1 Uart debbug
+1 input reset
+
+
 */
+#define LED_LEFT 0
+#define LED_RIGHT 1
 #define LeftFront 3
 #define LeftBack 4
 #define RightFront 5
@@ -52,15 +72,20 @@ PB15 MOSI
     */
 
 
+    
 void CAR_Leds(void){
-    GPIOB->ODR &= ~(3<<0);
-    // Checar si es menor que 235
-    if(TIM3->CCR1>115)
-        GPIOB->ODR |= (1<<0);
-    // Checar si es menor que 245
-    if(TIM3->CCR1 < 125)
-        GPIOB->ODR |= (1<<1);
+    /*
+    160 - 400
+    0     180
 
+    for 45 deg = 220
+    for 135 deg = 340
+    if(pwm_val > 280) cmd = 0x02; // Right
+    if(pwm_val < 280) cmd = 0x03; // Left
+    */
+    GPIOB->ODR &= ~(3<<0);
+    if(TIM3->CCR1 > 280) GPIOB->ODR |= (LED_RIGHT<<0);
+    if(TIM3->CCR1 < 280) GPIOB->ODR |= (LED_LEFT<<1);
 }
 
 
@@ -75,12 +100,18 @@ void CAR_Speed(uint16_t speed){
 void CAR_Front(void){
     GPIOA->ODR &=(0<<RightBack)|(0<<LeftBack);
     GPIOA->ODR |=(1<<RightFront)|(1<<LeftFront);
+    
 }
 void CAR_Back(void){
     GPIOA->ODR &=(0<<RightFront)|(0<<LeftFront);
     GPIOA->ODR |=(1<<RightBack)|(1<<LeftBack);
 }
 
+void CAR_Stop(void){
+    //GPIOA->ODR &=(0<<RightBack)|(0<<LeftBack)|(0<<RightFront)|(0<<LeftFront);
+    //GPIOD->ODR |=(1<<1); //LED STOP
+	CAR_Speed(0);
+}
 /*
 angle should varie between -PI/4 to PI/4  (-45 to 45 degrees)
 
