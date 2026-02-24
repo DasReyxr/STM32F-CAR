@@ -2246,7 +2246,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "071a6e87-1da1-4de1-9d21-47e50fdb6f7e")
-		(property "Reference" "C2_driver"
+		(property "Reference" "C2_driver1"
 			(at 152.4 48.2599 0)
 			(effects
 				(font
@@ -2264,7 +2264,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 149.5552 53.34 0)
 			(effects
 				(font
@@ -2300,7 +2300,7 @@
 		(instances
 			(project "driver_puenteH"
 				(path "/b3b63d40-911d-4ea6-b805-39f1fc607e60"
-					(reference "C2_driver")
+					(reference "C2_driver1")
 					(unit 1)
 				)
 			)
@@ -2403,7 +2403,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1575f9a6-51e7-4298-a593-84d6f3f2ee60")
-		(property "Reference" "C3_driver"
+		(property "Reference" "C3_driver1"
 			(at 95.25 40.6399 0)
 			(effects
 				(font
@@ -2421,7 +2421,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 92.4052 45.72 0)
 			(effects
 				(font
@@ -2457,7 +2457,7 @@
 		(instances
 			(project "driver_puenteH"
 				(path "/b3b63d40-911d-4ea6-b805-39f1fc607e60"
-					(reference "C3_driver")
+					(reference "C3_driver1")
 					(unit 1)
 				)
 			)
@@ -2473,7 +2473,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "415f8f08-7633-4014-a7b6-52c115a6e2e6")
-		(property "Reference" "C1_Driver"
+		(property "Reference" "C1_Driver1"
 			(at 78.74 40.6399 0)
 			(effects
 				(font
@@ -2491,7 +2491,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 75.8952 45.72 0)
 			(effects
 				(font
@@ -2527,7 +2527,7 @@
 		(instances
 			(project ""
 				(path "/b3b63d40-911d-4ea6-b805-39f1fc607e60"
-					(reference "C1_Driver")
+					(reference "C1_Driver1")
 					(unit 1)
 				)
 			)
