@@ -1,0 +1,21 @@
+!SESSION 2026-03-01 16:35:05.000 -----------------------------------------------
+eclipse.buildId=Version 2.1.0
+java.version=21.0.9
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -data /home/kevin/Documents/carrorepo/STM32F-CAR/0MainProject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-03-01 16:35:13.330
+!MESSAGE Log4j2 initialized with config file /home/kevin/Documents/carrorepo/STM32F-CAR/0MainProject/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-03-01 16:35:16.710
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-03-01 16:35:49.749
+!MESSAGE Indexed 'TXRF' (24 sources, 120 headers) in 4.35 sec: 10,855 declarations; 56,199 references; 2 unresolved inclusions; 36 syntax errors; 188 unresolved names (0.28%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-03-01 16:35:52.504
+!MESSAGE Indexed 'CARRITOBLPRX' (25 sources, 123 headers) in 2.75 sec: 11,262 declarations; 62,901 references; 2 unresolved inclusions; 36 syntax errors; 188 unresolved names (0.25%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-03-01 16:35:54.537
+!MESSAGE Indexed 'BluePillHandler' (24 sources, 118 headers) in 2.03 sec: 10,107 declarations; 50,200 references; 3 unresolved inclusions; 37 syntax errors; 298 unresolved names (0.49%)

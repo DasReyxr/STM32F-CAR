@@ -40,8 +40,8 @@ PC13 BATRED
 PC14 BATYELL
 PC15 BATGREEN
 
-PB6 LUZ
-PB7 STOP
+PD0 LUZ
+PD1 STOP
 1Adc detección de batería 
 4Out led direccional/stop/luz
 3Out led inducador bateria

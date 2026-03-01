@@ -177,7 +177,7 @@ int main(void)
               // --- Speed Motor ---
               CAR_Speed(rxData.speed);
               // -- LED  ---
-              if(rxData.cmd == 0x10) GPIOB->ODR ^= (1<<6); // Toggle Light
+              if(rxData.cmd == 0x10) GPIOD->ODR ^= (1<<0); // Toggle Light
               }
               /*ADC_BAT*/
 
