@@ -65,10 +65,6 @@ void Error_Handler(void);
 #define YELLOW_GPIO_Port GPIOC
 #define GREEN_Pin GPIO_PIN_15
 #define GREEN_GPIO_Port GPIOC
-#define LUZ_Pin GPIO_PIN_0
-#define LUZ_GPIO_Port GPIOD
-#define STOP_Pin GPIO_PIN_1
-#define STOP_GPIO_Port GPIOD
 #define LeftFront_Pin GPIO_PIN_3
 #define LeftFront_GPIO_Port GPIOA
 #define LeftBack_Pin GPIO_PIN_4
@@ -87,6 +83,10 @@ void Error_Handler(void);
 #define IRQ_GPIO_Port GPIOA
 #define CE_Pin GPIO_PIN_10
 #define CE_GPIO_Port GPIOA
+#define LUZ_Pin GPIO_PIN_6
+#define LUZ_GPIO_Port GPIOB
+#define STOP_Pin GPIO_PIN_7
+#define STOP_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

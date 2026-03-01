@@ -162,21 +162,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  	  	  	  	 char uart_buf[100];
-	                int len = snprintf(uart_buf, sizeof(uart_buf), "bat=%d cmd=%d speed=%d angle=%.2f\r\n", batery_val, rxData.cmd, rxData.speed, rxData.angle);
-	                HAL_UART_Transmit(&huart3, (uint8_t*)uart_buf, len, HAL_MAX_DELAY);
-	                HAL_Delay(100);
-	                adc_val = HAL_ADC_GetValue(&hadc1);
-	                             batery_val = (adc_val*100)>>12;
-	                             if(batery_val<=33){
-	                             HAL_GPIO_WritePin(GPIOC,RED_Pin,GPIO_PIN_SET);
-	                             HAL_GPIO_WritePin(GPIOC,GREEN_Pin,GPIO_PIN_RESET);}
-	                             else if(batery_val>33 && batery_val<=66){
-	                             HAL_GPIO_WritePin(GPIOC,YELLOW_Pin,GPIO_PIN_SET);
-	                             HAL_GPIO_WritePin(GPIOC,RED_Pin,GPIO_PIN_RESET);}
-	                             else {
-	                             HAL_GPIO_WritePin(GPIOC,GREEN_Pin,GPIO_PIN_SET);
-	                             HAL_GPIO_WritePin(GPIOC,YELLOW_Pin,GPIO_PIN_RESET);}
+
     /* USER CODE BEGIN 3 */
     nrf24_listen();
     if(nrf24_data_available()){
@@ -231,12 +217,13 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL4;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -505,14 +492,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, RED_Pin|YELLOW_Pin|GREEN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, LUZ_Pin|STOP_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LeftFront_Pin|LeftBack_Pin|RightFront_Pin|RightBack_Pin
                           |CSN_Pin|CE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_DIR1_Pin|LED_DIR2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED_DIR1_Pin|LED_DIR2_Pin|LUZ_Pin|STOP_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : RED_Pin YELLOW_Pin GREEN_Pin */
   GPIO_InitStruct.Pin = RED_Pin|YELLOW_Pin|GREEN_Pin;
@@ -520,13 +504,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LUZ_Pin STOP_Pin */
-  GPIO_InitStruct.Pin = LUZ_Pin|STOP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LeftFront_Pin LeftBack_Pin RightFront_Pin RightBack_Pin
                            CSN_Pin CE_Pin */
@@ -537,8 +514,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED_DIR1_Pin LED_DIR2_Pin */
-  GPIO_InitStruct.Pin = LED_DIR1_Pin|LED_DIR2_Pin;
+  /*Configure GPIO pins : LED_DIR1_Pin LED_DIR2_Pin LUZ_Pin STOP_Pin */
+  GPIO_InitStruct.Pin = LED_DIR1_Pin|LED_DIR2_Pin|LUZ_Pin|STOP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -549,9 +526,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IRQ_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure peripheral I/O remapping */
-  __HAL_AFIO_REMAP_PD01_ENABLE();
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
