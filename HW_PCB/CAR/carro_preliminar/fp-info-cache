@@ -1,4 +1,4 @@
-26263697186323
+1772552076912
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -381,104 +381,6 @@ Battery
 Battery_Panasonic_CR3032-VCN_Vertical_CircularHoles
 Panasonic CR-3032/VCN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D508.PDF
 battery CR-3032 coin cell vertical
-0
-2
-2
-BuckLibrary
-2525
-
-
-0
-2
-2
-BuckLibrary
-SOIC127P600X175-16N
-
-
-0
-16
-16
-BuckLibrary
-SOP65P490X110-8N
-
-
-0
-8
-8
-BuckLibrary
-SOP65P640X120-14N
-
-
-0
-14
-14
-BuckLibrary
-TRIM_TC33X-2-502E
-<b>TC33X-2</b><br>
-
-0
-3
-3
-Buck_Lib
-60B683C
-60B683C-2
-Inductor
-0
-2
-2
-Buck_Lib
-ABLS8000MHZB2T
-ABLS-8.000MHZ-B2-T-2
-Crystal or Oscillator
-0
-2
-2
-Buck_Lib
-BUK7K134100EX
-BUK7K134-100EX-5
-MOSFET (N-Channel)
-0
-10
-10
-Buck_Lib
-DIP254P762X533-7P
-DIP254P762X533-7P
-Integrated Circuit
-0
-7
-7
-Buck_Lib
-SIS990DNT1GE3
-PowerPAK® 1212-8_2020
-MOSFET (N-Channel)
-0
-14
-14
-Buck_Lib
-SOD3716X135N
-SOD - 123
-Zener Diode
-0
-2
-2
-Buck_Lib
-SOIC127P600X175-8N
-D0008A
-Integrated Circuit
-0
-8
-8
-Buck_Lib
-SOP65P780X200-28N
-(SS)28-Lead(SSOP)
-Integrated Circuit
-0
-28
-28
-Buck_Lib
-cpa220
-
-
 0
 2
 2
