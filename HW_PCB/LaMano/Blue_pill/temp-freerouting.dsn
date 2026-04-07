@@ -1,4 +1,4 @@
-(pcb freerouting.dsn
+(pcb "C:\Users\dasre\Documents\Knowledge-db\ghFiles\STM32F-CAR\HW_PCB\LaMano\Blue_pill\temp-freerouting.dsn"
   (parser
     (string_quote ")
     (space_in_quoted_tokens on)
