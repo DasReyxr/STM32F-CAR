@@ -1,9 +1,29 @@
 #include "FuzzyLogic.h"
 
-float Trapz(float x, FuzzyArgs args) {
-  if (x <= args.Inf) return 1;
-  if ((x < args.Sup) && (x > args.Inf)) return (args.Sup-x)/(args.Sup-args.Inf);
-  if (x >= args.Sup) return 0;
+float Trapz(float x, FuzzyArgs args, uint8_t type)
+{
+    if(type == LOW)
+    {
+        // 1 ----\
+        //        \
+        //         \
+        // 0 --------\
+
+        if(x <= args.Inf) return 1.0f;
+        if(x < args.Sup) return (args.Sup - x)/(args.Sup - args.Inf);
+        return 0.0f;
+    }
+    if(type == HIGH)
+    {
+        //         /-----
+        //        /
+        //       /
+        // -----/ 1
+
+        if(x <= args.Inf) return 0.0f;
+        if(x < args.Sup) return (x - args.Inf)/(args.Sup - args.Inf);
+        return 1.0f;
+    }
 }
 
 float Triang(float x, FuzzyArgs args) {
@@ -15,7 +35,7 @@ float Triang(float x, FuzzyArgs args) {
 // Sensors
 float Black(float x) {
   FuzzyArgs BlackArgs = {350, 0, 500};
-  return Trapz(x, BlackArgs);
+  return Trapz(x, BlackArgs, LOW);
 }
 
 float Gray(float x) {
@@ -25,13 +45,13 @@ float Gray(float x) {
 
 float White(float x) {
   FuzzyArgs WhiteArgs = {550, 0, 600};
-  return Trapz(x, WhiteArgs);
+  return Trapz(x, WhiteArgs, HIGH);
 }
 
 // Motors
 float Low(float x) {
   FuzzyArgs LowArgs = {0, 0, 50};
-  return Trapz(x, LowArgs);
+  return Trapz(x, LowArgs, LOW);
 }
 
 float Medium(float x) {
@@ -41,5 +61,5 @@ float Medium(float x) {
 
 float High(float x) {
   FuzzyArgs HighArgs = {50, 0, 100};
-  return Trapz(x, HighArgs);
+  return Trapz(x, HighArgs, HIGH);
 }
