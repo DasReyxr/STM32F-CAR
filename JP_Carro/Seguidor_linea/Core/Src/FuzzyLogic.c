@@ -67,6 +67,29 @@ float Highf(float x) {
 }
 
 
+// Centroide 
+
+float f_low(float y)
+{
+    return (Low.R - y)/m_low;
+}
+
+float f_Mid1(float y)
+{
+    return (y - Mid.L)/m_Mid0;
+}
+
+float f_Mid2(float y)
+{
+    return (Mid.R - y)/m_Mid1;
+}
+
+float f_High(float y)
+{
+    return (y-High.L)/m_High;
+}
+
+
 
 void areas(void){
   /*
@@ -80,18 +103,18 @@ u_High = (x-HL)/(HR-HL)
   FuzzyArgs Low = {0, 0, 50};
   FuzzyArgs Mid = {25, 50, 75};
   FuzzyArgs High = {50, 0, 100};
-  float x_Low ; // Example input for Low
-  float x_mid ; // Example input for Mid
-  float x_High ; // Example input for High
+//  float x_Low ; // Example input for Low
+//  float x_mid ; // Example input for Mid
+//  float x_High ; // Example input for High
   
   float y_Low;// Lowf(x_Low);
   float y_mid;//Mediumf(x_mid);
   float y_High;//Highf(x_High);
   // Low x_l y_l
   
-      // Low and Mid
-    float m_Low = -1/(Low.R-Low.L); 
-    float x_low = (Low.R - y_low)/(m_low);
+  // Low and Mid
+  float m_Low = -1/(Low.R-Low.L); 
+  float x_low = f_low(y_low);
 
   float C_Low = y_Low*x_Low;
   float T_Low = y_Low*(Low.R-x_Low)/2;
@@ -101,8 +124,8 @@ u_High = (x-HL)/(HR-HL)
   float m_Mid0 = 1/(Mid.C-Mid.L);
   float m_Mid1 =-1/(Mid.R-Mid.C);
 
-  float x_m0 = (y_mid - Mid.L) /m_Mid0;
-  float x_m1 = (y_mid - Mid.R) /m_Mid1;
+  float x_m0 = f_Mid1(y_mid);
+  float x_m1 = f_Mid2(y_mid);
 
   float TS = (x_m1-x_m0)*(1-y_mid)/2.0f;
   float TT = (Mid.R-Mid.L)/2.0f;
@@ -116,8 +139,8 @@ u_High = (x-HL)/(HR-HL)
   float Y1 = (Low.R * Mid.C - Low.L * Mid.L)/(Mid.C - Mid.L+ Low.R- Low.L);
   float y_lm = fmin(y_Low,y_Mid);
   
-  float x_lm0 = (y_lm - Mid.L)/m_Mid0; // Derived from m_Mid1 
-  float x_lm1 = (Low.R - y_lm)/m_low; // Derived from m_Mid1 
+  float x_lm0 = f_Mid1(y_lm); // Derived from m_Mid1 
+  float x_lm1 = f_low(y_lm)(Low.R - y_lm)/m_low; // Derived from m_Mid1 
   
   if(y_lm<Y1) 
     float T2 = (x_Low-x_Low0)*(Y1-y_lm)/2.0f;
