@@ -1,0 +1,18 @@
+!SESSION 2026-06-05 18:31:02.761 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-06-05 18:32:11.963
+!MESSAGE Log4j2 initialized with config file /home/rober/Documentos/Roberto/Universidad/Proyectos/Carrito_joshua/STM32F-CAR/JP_Carro/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-06-05 18:32:16.373
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-06-05 18:33:15.067
+!MESSAGE Indexed 'Seguidor_linea' (24 sources, 122 headers) in 5.75 sec: 12,561 declarations; 61,288 references; 1 unresolved inclusions; 92 syntax errors; 243 unresolved names (0.33%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-06-05 18:38:13.160
+!MESSAGE Indexed 'Seguidor_linea' (24 sources, 123 headers) in 4.08 sec: 12,585 declarations; 61,295 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.32%)

@@ -1,0 +1,8 @@
+../Core/Src/FuzzyLogic.c:4:7:Trapz	32	static
+../Core/Src/FuzzyLogic.c:31:7:Triang	24	static
+../Core/Src/FuzzyLogic.c:38:7:Black	32	static
+../Core/Src/FuzzyLogic.c:43:7:Gray	32	static
+../Core/Src/FuzzyLogic.c:48:7:White	32	static
+../Core/Src/FuzzyLogic.c:54:7:Low	32	static
+../Core/Src/FuzzyLogic.c:59:7:Medium	32	static
+../Core/Src/FuzzyLogic.c:64:7:High	32	static
