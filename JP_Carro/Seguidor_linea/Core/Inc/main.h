@@ -36,18 +36,33 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+// aqui o alla abajo estan esos dos
+
+
+typedef struct {
+    uint16_t Sensor[2];
+    uint16_t PWM_Motor_LEFT;
+    uint16_t PWM_Motor_RIGHT;
+
+} CarroData;
+
+// sensor [0] derecho, sensor[1] izquierdo 
+
 
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+#define PWM_PERIOD 4799
 
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+// vavvava
 /* USER CODE END EM */
+
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
