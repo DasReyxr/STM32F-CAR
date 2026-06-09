@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/build/Debug/cmake_install.cmake",
+		"/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/build/Debug/cmake/stm32cubemx/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
