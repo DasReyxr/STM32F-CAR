@@ -105,7 +105,9 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+ HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.Sensor, 2); 
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);//PWM para motor derecho
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);//PWM para motor izquierdo 
   //HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.sensors, 2);
   /* USER CODE END 2 */
 
