@@ -1,0 +1,14 @@
+../Core/Inc/Centroide.h:25:7:f_Low	16	static
+../Core/Inc/Centroide.h:29:7:f_Mid1	16	static
+../Core/Inc/Centroide.h:32:7:f_Mid2	16	static
+../Core/Inc/Centroide.h:36:7:f_High	16	static
+../Core/Inc/Centroide.h:40:7:Centroid_T	24	static
+../Core/Inc/Centroide.h:44:7:Centroid_T_R	16	static
+../Core/Inc/Centroide.h:49:7:Centroid_Sq	16	static
+../Core/Src/Centroide.c:18:7:Centroide	24	static
+../Core/Src/Centroide.c:21:7:Area_Low	40	static
+../Core/Src/Centroide.c:33:7:Area_Mid	48	static
+../Core/Src/Centroide.c:45:7:Area_High	40	static
+../Core/Src/Centroide.c:58:7:Centroid_InterLm	56	static
+../Core/Src/Centroide.c:76:7:Centroid_InterMh	64	static
+../Core/Src/Centroide.c:97:6:Centroide_Init	8	static

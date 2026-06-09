@@ -30,11 +30,6 @@ static const FuzzyArgs Low = {0.0f, 0.0f, 50.0f};
 static const FuzzyArgs Mid = {25.0f, 50.0f, 75.0f};
 static const FuzzyArgs High = {50.0f, 0.0f, 100.0f};
 
-static const float M_LOW  = -1.0f / (Low.R - Low.L);
-static const float M_MID0 =  1.0f / (Mid.C - Mid.L);
-static const float M_MID1 = -1.0f / (Mid.R - Mid.C);
-static const float M_HIGH =  1.0f / (High.R - High.L);
-
 static const uint16_t limit_High = 3000; 
 
 #endif // FUZZYLOGIC_H

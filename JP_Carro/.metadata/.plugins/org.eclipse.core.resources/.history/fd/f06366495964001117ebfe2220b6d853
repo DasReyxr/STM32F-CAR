@@ -51,4 +51,5 @@ float Centroid_Sq(float x0, float x1)
     return (x0 + x1) / 2.0f;
 }
 
+
 #endif // FUZZYLOGIC_H
