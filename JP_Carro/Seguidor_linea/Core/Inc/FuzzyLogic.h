@@ -5,6 +5,7 @@
 
 #define TRAPZ_LOW 0
 #define TRAPZ_HIGH 1
+#define TRIANG 2
 
 typedef struct {
     float L; // Left
@@ -14,6 +15,10 @@ typedef struct {
 
 float Trapz(float x, FuzzyArgs args, uint8_t type);
 float Triang(float x, FuzzyArgs args);
+float FuzzyMembership(float x, FuzzyArgs args, uint8_t type);
+float MamdaniAnd(float a, float b);
+float MamdaniOr(float a, float b);
+float MamdaniRuleStrength(float a, float b);
 
 //-------- Sensors --------
 float Black(float x);

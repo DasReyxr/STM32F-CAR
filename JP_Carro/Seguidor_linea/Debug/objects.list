@@ -1,5 +1,6 @@
 "./Core/Src/Centroide.o"
 "./Core/Src/FuzzyLogic.o"
+"./Core/Src/Mamdani.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32f4xx_hal_msp.o"
 "./Core/Src/stm32f4xx_it.o"

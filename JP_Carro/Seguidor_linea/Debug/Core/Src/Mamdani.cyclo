@@ -1,0 +1,13 @@
+../Core/Inc/Centroide.h:30:7:f_Low	1
+../Core/Inc/Centroide.h:34:7:f_Mid1	1
+../Core/Inc/Centroide.h:37:7:f_Mid2	1
+../Core/Inc/Centroide.h:41:7:f_High	1
+../Core/Inc/Centroide.h:45:7:Centroid_T	1
+../Core/Inc/Centroide.h:49:7:Centroid_T_R	1
+../Core/Inc/Centroide.h:54:7:Centroid_Sq	1
+../Core/Src/Mamdani.c:29:22:Mamdani_GetRules	2
+../Core/Src/Mamdani.c:36:14:sensor_membership	5
+../Core/Src/Mamdani.c:46:6:Mamdani_Infer	22
+../Core/Src/Mamdani.c:83:6:Mamdani_Init	1
+../Core/Src/Mamdani.c:88:7:Mamdani_Defuzz	1
+../Core/Src/Mamdani.c:102:6:Mamdani_MotorCommand	2

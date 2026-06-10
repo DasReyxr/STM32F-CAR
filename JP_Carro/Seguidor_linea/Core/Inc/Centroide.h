@@ -11,15 +11,20 @@ const float M_HIGH =  1.0f / (High.R - High.L);
 
 
 // ################## Functions ##################
+typedef struct {
+    float num; // AiCi 
+    float den; // Ai
+} DefuzzArgs;
 
 float Centroide(float y_low, float y_mid, float y_high);
 void Centroide_Init(void);
-float Centroid_Low(float y_low);
-float Centroid_Mid(float y_mid);
-float Centroid_High(float y_high);
 
-float Centroid_InterLm(float y_low, float y_mid);
-float Centroid_InterMh(float y_mid, float y_high);
+DefuzzArgs Area_Low(float y_low);
+DefuzzArgs Area_Mid(float y_mid);
+DefuzzArgs Area_High(float y_high);
+
+DefuzzArgs Area_InterLm(float y_low, float y_mid);
+DefuzzArgs Area_InterMh(float y_mid, float y_high);
 
 
 float f_Low(float y){

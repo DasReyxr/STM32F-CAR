@@ -31,3 +31,15 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64
 
 !ENTRY org.eclipse.cdt.core 1 0 2026-06-09 17:15:44.561
 !MESSAGE Indexed 'Seguidor_linea' (25 sources, 123 headers) in 3.24 sec: 12,668 declarations; 61,529 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.32%)
+!SESSION 2026-06-10 11:49:04.011 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-06-10 11:49:17.168
+!MESSAGE Log4j2 initialized with config file /home/rober/Documentos/Roberto/Universidad/Proyectos/Carrito_joshua/STM32F-CAR/JP_Carro/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-06-10 11:49:25.293
+!MESSAGE Started RMI Server, listening on port 41337
