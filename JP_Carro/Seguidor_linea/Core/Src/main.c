@@ -21,12 +21,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "FuzzyLogic.h"
+#include "Mamdani.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 CarroData carro;
+MotorCommand_t cmd;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -105,9 +107,13 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+  HAL_GPIO_WritePin(GPIOA, AIN1_Pin|BIN1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, AIN2_Pin|BIN2_Pin, GPIO_PIN_RESET);
  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.Sensor, 2); 
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);//PWM para motor derecho
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);//PWM para motor izquierdo 
+  Mamdani_Init();
+  
   //HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.sensors, 2);
   /* USER CODE END 2 */
 
@@ -118,6 +124,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    Mamdani_MotorCommand(carro.Sensor[0], carro.Sensor[1], &cmd);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint32_t)(cmd.left*PWM_PERIOD/100.0f));
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, (uint32_t)(cmd.right*PWM_PERIOD/100.0f));
   }
   /* USER CODE END 3 */
 }
@@ -330,6 +339,7 @@ static void MX_DMA_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* USER CODE BEGIN MX_GPIO_Init_1 */
 
   /* USER CODE END MX_GPIO_Init_1 */
@@ -337,6 +347,16 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, AIN1_Pin|AIN2_Pin|BIN1_Pin|BIN2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : AIN1_Pin AIN2_Pin BIN1_Pin BIN2_Pin */
+  GPIO_InitStruct.Pin = AIN1_Pin|AIN2_Pin|BIN1_Pin|BIN2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

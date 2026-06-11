@@ -2,28 +2,33 @@
 #include "Centroide.h"
 
 // Default rule base for two motors (MI and MD).
+// Circuit with WHITE track on BLACK background.
 // Each rule now defines the consequent for both motors.
 static const MamdaniRule_t default_rules[] = {
-    // Both sensors over the black line -> both motors moderate
-    {S_BLACK, S_BLACK, O_MID, O_MID, 1.0f},
+    // Both sensors over the white line -> both motors moderate (follow line)
+    {S_WHITE, S_WHITE, O_MID, O_MID, 1.0f},
 
-    // Slight left drift -> reduce left motor, keep right moderate
-    {S_BLACK, S_GRAY,  O_LOW, O_MID, 1.0f},
-    {S_GRAY,  S_BLACK, O_MID, O_LOW, 1.0f},
+    // Slight left drift (left on white, right on gray) -> reduce right motor, boost left
+    {S_WHITE, S_GRAY,  O_MID, O_LOW, 1.0f},
+    
+    // Slight right drift (right on white, left on gray) -> reduce left motor, boost right
+    {S_GRAY,  S_WHITE, O_LOW, O_MID, 1.0f},
 
-    // Strong drift toward the right -> left motor stronger, right motor weaker
-    {S_WHITE, S_BLACK, O_HIGH, O_LOW, 1.0f},
+    // Strong drift toward the left (right sensor left track) -> left motor very weak, right stronger
+    {S_GRAY, S_BLACK, O_LOW, O_HIGH, 1.0f},
+    
+    // Strong drift toward the right (left sensor left track) -> left motor stronger, right very weak
+    {S_BLACK, S_GRAY, O_HIGH, O_LOW, 1.0f},
 
-    // Strong drift toward the left -> left motor weaker, right motor stronger
-    {S_BLACK, S_WHITE, O_LOW,  O_HIGH, 1.0f},
+    // Both sensors off the track (black background) -> stop or slow down
+    {S_BLACK, S_BLACK, O_LOW, O_LOW, 1.0f},
 
-    // Both on the white background -> slow both motors
-    {S_WHITE, S_WHITE, O_LOW, O_LOW, 1.0f},
-    {S_WHITE, S_GRAY,  O_LOW, O_MID, 1.0f},
-    {S_GRAY,  S_WHITE, O_MID, O_LOW, 1.0f},
-
-    // Gray + Gray -> both moderate
+    // Gray + Gray (both between line and background) -> both moderate
     {S_GRAY,  S_GRAY,  O_MID, O_MID, 1.0f},
+    
+    // One on white, one completely off -> stop/reverse
+    {S_WHITE, S_BLACK, O_LOW, O_HIGH, 1.0f},
+    {S_BLACK, S_WHITE, O_HIGH, O_LOW, 1.0f},
 };
 
 const MamdaniRule_t* Mamdani_GetRules(size_t *count)
@@ -84,7 +89,7 @@ void Mamdani_Init(void)
 {
     Centroide_Init();
 }
-
+/*
 float Mamdani_Defuzz(float left_raw, float right_raw)
 {
     float mi_low = 0.0f, mi_mid = 0.0f, mi_high = 0.0f;
@@ -98,7 +103,7 @@ float Mamdani_Defuzz(float left_raw, float right_raw)
     (void)right_cmd;
     return left_cmd;
 }
-
+*/
 void Mamdani_MotorCommand(float left_raw, float right_raw, MotorCommand_t *cmd)
 {
     float mi_low = 0.0f, mi_mid = 0.0f, mi_high = 0.0f;
