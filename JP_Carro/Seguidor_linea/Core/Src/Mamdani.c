@@ -6,29 +6,36 @@
 // Each rule now defines the consequent for both motors.
 static const MamdaniRule_t default_rules[] = {
     // Both sensors over the white line -> both motors moderate (follow line)
-    {S_WHITE, S_WHITE, O_MID, O_MID, 1.0f},
+    // Centrado perfecto -> ambos motores al máximo
+{S_WHITE, S_WHITE,  O_HIGH, O_HIGH, 1.0f},
 
-    // Slight left drift (left on white, right on gray) -> reduce right motor, boost left
-    {S_WHITE, S_GRAY,  O_MID, O_LOW, 1.0f},
-    
-    // Slight right drift (right on white, left on gray) -> reduce left motor, boost right
-    {S_GRAY,  S_WHITE, O_LOW, O_MID, 1.0f},
+// Borde izquierdo (L en gris, R en blanco)
+// -> Ligeramente a la izquierda: reducir motor derecho
+{S_GRAY,  S_WHITE,  O_HIGH, O_MID,  1.0f},
 
-    // Strong drift toward the left (right sensor left track) -> left motor very weak, right stronger
-    {S_GRAY, S_BLACK, O_LOW, O_HIGH, 1.0f},
-    
-    // Strong drift toward the right (left sensor left track) -> left motor stronger, right very weak
-    {S_BLACK, S_GRAY, O_HIGH, O_LOW, 1.0f},
+// Borde derecho (L en blanco, R en gris)
+// -> Ligeramente a la derecha: reducir motor izquierdo
+{S_WHITE, S_GRAY,   O_MID,  O_HIGH, 1.0f},
 
-    // Both sensors off the track (black background) -> stop or slow down
-    {S_BLACK, S_BLACK, O_LOW, O_LOW, 1.0f},
+// Desvío fuerte izquierda (L en negro, R en blanco)
+// -> Girar fuerte a la izquierda: motor L alto, motor R muy bajo
+{S_BLACK, S_WHITE,  O_HIGH, O_LOW,  1.0f},
 
-    // Gray + Gray (both between line and background) -> both moderate
-    {S_GRAY,  S_GRAY,  O_MID, O_MID, 1.0f},
-    
-    // One on white, one completely off -> stop/reverse
-    {S_WHITE, S_BLACK, O_LOW, O_HIGH, 1.0f},
-    {S_BLACK, S_WHITE, O_HIGH, O_LOW, 1.0f},
+// Desvío fuerte derecha (L en blanco, R en negro)
+// -> Girar fuerte a la derecha: motor L muy bajo, motor R alto
+{S_WHITE, S_BLACK,  O_LOW,  O_HIGH, 1.0f},
+
+// Ambos en borde (curva suave o línea gruesa) -> velocidad media
+{S_GRAY,  S_GRAY,   O_MID,  O_MID,  1.0f},
+
+// L en negro, R en gris -> desvío moderado-izquierda
+{S_BLACK, S_GRAY,   O_HIGH, O_LOW,  1.0f},
+
+// L en gris, R en negro -> desvío moderado-derecha
+{S_GRAY,  S_BLACK,  O_LOW,  O_HIGH, 1.0f},
+
+// Ambos en negro (perdió la línea completamente) -> detener
+{S_BLACK, S_BLACK,  O_LOW,  O_LOW,  0.0f},
 };
 
 const MamdaniRule_t* Mamdani_GetRules(size_t *count)
