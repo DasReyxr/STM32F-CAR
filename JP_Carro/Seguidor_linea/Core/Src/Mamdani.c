@@ -122,7 +122,7 @@ void Mamdani_MotorCommand(float left_raw, float right_raw, MotorCommand_t *cmd)
 
     if (cmd != 0)
     {
-        cmd->left  = Centroide(mi_low, mi_mid, mi_high) / 100.0f;
-        cmd->right = Centroide(md_low, md_mid, md_high) / 100.0f;
+        cmd->left  = Centroide(mi_low, mi_mid, mi_high);
+        cmd->right = Centroide(md_low, md_mid, md_high);
     }
 }

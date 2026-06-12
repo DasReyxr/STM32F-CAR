@@ -125,7 +125,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      Mamdani_MotorCommand(300, 403, &cmd);//nojala
+      Mamdani_MotorCommand(600, 300, &cmd);
       __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint32_t)(cmd.left*PWM_PERIOD/100.0f));
       __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, (uint32_t)(cmd.right*PWM_PERIOD/100.0f));
   }

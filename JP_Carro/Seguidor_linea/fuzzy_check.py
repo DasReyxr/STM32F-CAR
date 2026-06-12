@@ -183,8 +183,8 @@ def Area_InterMh(y_mid, y_high):
     y_mh = min(y_mid, y_high)
     x_mh0 = f_High(y_mh)
     x_mh1 = f_Mid2(y_mh)
-    T2 = (x_mh1 - x_mh0) * (Y2 - y_mh) / 2.0 if y_mh < Y1 else 0.0
-    TRight_local = (MID_ARGS[2] - HIGH_ARGS[0] * Y2) / 2.0
+    T2 = (x_mh1 - x_mh0) * (Y2 - y_mh) / 2.0 if y_mh < Y2 else 0.0
+    TRight_local = (MID_ARGS[2] - HIGH_ARGS[0]) * Y2 / 2.0
     return {
         'num': TRight_local * C_TRight - T2 * Centroid_T(x_mh0, x_mh1, X2),
         'den': TRight_local - T2,
@@ -290,4 +290,4 @@ if __name__ == '__main__':
             continue
 
         result = evaluate(left_raw, right_raw)
-        print(f"{result['left_centroid_expected']:.4f} {result['right_centroid_expected']:.4f}")
+        print(f"L={result['left_centroid_expected']:.2f} R={result['right_centroid_expected']:.2f}")
