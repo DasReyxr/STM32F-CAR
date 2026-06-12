@@ -1,4 +1,5 @@
 #include "Centroide.h"
+#include <math.h>
 
 // GLobal variables 
 static float Y1;
@@ -51,7 +52,7 @@ float Centroide(float y_low, float y_mid, float y_high){
 
 DefuzzArgs Area_Low(float y_low){
   DefuzzArgs Area_n_Centroid = {0.0f,0.0f};
-  float x_low = f_low(y_low);
+  float x_low = f_Low(y_low);
 
   float A_Sq_low = y_low*x_low;
   float A_T_low = y_low*(Low.R-x_low)/2;
@@ -104,7 +105,7 @@ DefuzzArgs Area_InterLm(float y_low, float y_mid){
   float y_lm = fmin(y_low,y_mid);
   
   float x_lm0 = f_Mid1(y_lm);  
-  float x_lm1 = f_low(y_lm);
+  float x_lm1 = f_Low(y_lm);
   float X_1 = f_Mid1(Y1); // Constante 
   float A_T1;
   if(y_lm<Y1) 

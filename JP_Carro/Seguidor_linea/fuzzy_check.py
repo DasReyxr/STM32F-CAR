@@ -275,20 +275,19 @@ def evaluate(left_raw, right_raw):
 
 if __name__ == '__main__':
     centroide_init()
-    test_values = [
-        (300.0, 300.0),
-        (400.0, 500.0),
-        (500.0, 500.0),
-        (600.0, 400.0),
-        (550.0, 600.0),
-        (650.0, 650.0),
-    ]
+    print('Ingrese los valores crudos del sensor izquierdo y derecho separados por un espacio.')
+    print('Escriba q o enter para salir.')
 
-    print('left_raw,right_raw, left_C, left_expected, right_C, right_expected')
-    for left_raw, right_raw in test_values:
+    while True:
+        user_input = input('left right> ').strip()
+        if not user_input or user_input.lower() in ('q', 'quit', 'exit'):
+            break
+
+        try:
+            left_raw, right_raw = map(float, user_input.split())
+        except ValueError:
+            print('Entrada inválida. Ingrese dos números separados por espacio.')
+            continue
+
         result = evaluate(left_raw, right_raw)
-        print(
-            f"{left_raw},{right_raw}, "
-            f"{result['left_centroid_c']:.4f}, {result['left_centroid_expected']:.4f}, "
-            f"{result['right_centroid_c']:.4f}, {result['right_centroid_expected']:.4f}"
-        )
+        print(f"{result['left_centroid_expected']:.4f} {result['right_centroid_expected']:.4f}")
