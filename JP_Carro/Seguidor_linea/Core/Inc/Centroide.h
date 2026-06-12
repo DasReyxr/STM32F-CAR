@@ -4,10 +4,10 @@
 #include "FuzzyLogic.h"
 
 // Pendientes
-static const float M_LOW  = -1.0f / (Low.R - Low.L);
-static const float M_MID0 =  1.0f / (Mid.C - Mid.L);
-static const float M_MID1 = -1.0f / (Mid.R - Mid.C);
-static const float M_HIGH =  1.0f / (High.R - High.L);
+static const float M_LOW  = 1.0f / (Low.R - Low.L);
+static const float M_MID0 = 1.0f / (Mid.C - Mid.L);
+static const float M_MID1 = 1.0f / (Mid.R - Mid.C);
+static const float M_HIGH = 1.0f / (High.R - High.L);
 
 
 // ################## Functions ##################
