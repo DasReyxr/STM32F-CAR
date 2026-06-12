@@ -44,8 +44,8 @@ float Centroide(float y_low, float y_mid, float y_high){
   DefuzzArgs Area_H = Area_High(y_high);
   DefuzzArgs Area_LM = Area_InterLm(y_low, y_mid);
   DefuzzArgs Area_MH = Area_InterMh(y_mid, y_high);
-  float num = Area_L.num + Area_M.num + Area_H.num + Area_LM.num + Area_MH.num;
-  float den = Area_L.den + Area_M.den + Area_H.den + Area_LM.den + Area_MH.den;
+  float num = Area_L.num + Area_M.num + Area_H.num - Area_LM.num - Area_MH.num;
+  float den = Area_L.den + Area_M.den + Area_H.den - Area_LM.den - Area_MH.den;
   if(den == 0) return 0.0f; // Evitar división por cero
   return num / den;
 }
