@@ -114,7 +114,7 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);//PWM para motor izquierdo 
   HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_3);//Trigger para ADC
   Mamdani_Init();
-  //HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.Sensor, 2);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.Sensor, 2);
   //HAL_ADC_Start_DMA(&hadc1, (uint32_t*)carro.sensors, 2);
   /* USER CODE END 2 */
 
@@ -125,7 +125,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      Mamdani_MotorCommand(600, 300, &cmd);
+      Mamdani_MotorCommand(carro.Sensor[0], carro.Sensor[1], &cmd);
       __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint32_t)(cmd.left*PWM_PERIOD/100.0f));
       __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, (uint32_t)(cmd.right*PWM_PERIOD/100.0f));
   }
@@ -201,7 +201,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = ENABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
   hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC3;

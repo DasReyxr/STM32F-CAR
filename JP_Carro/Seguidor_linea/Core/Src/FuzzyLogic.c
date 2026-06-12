@@ -61,17 +61,17 @@ float MamdaniRuleStrength(float a, float b)
 
 //-------- Sensors --------
 float Black(float x) {
-  FuzzyArgs BlackArgs = {350, 0, 500};
+  FuzzyArgs BlackArgs = {3900, 0, 4020};
   return FuzzyMembership(x, BlackArgs, TRAPZ_LOW);
 }
 
 float Gray(float x) {
-  FuzzyArgs GrayArgs = {400, 500, 600};
+  FuzzyArgs GrayArgs = {3600, 3760, 3900};
   return FuzzyMembership(x, GrayArgs, TRIANG);
 }
 
 float White(float x) {
-  FuzzyArgs WhiteArgs = {550, 0, 600};
+  FuzzyArgs WhiteArgs = {3500, 0, 3600};
   return FuzzyMembership(x, WhiteArgs, TRAPZ_HIGH);
 }
 

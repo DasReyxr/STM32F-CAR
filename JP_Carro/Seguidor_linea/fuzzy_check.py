@@ -219,15 +219,15 @@ def sensor_membership(set_name, raw):
 
 
 RULES = [
-    ('white', 'white', 'mid', 'mid'),
-    ('white', 'gray', 'mid', 'low'),
-    ('gray', 'white', 'low', 'mid'),
-    ('gray', 'black', 'low', 'high'),
-    ('black', 'gray', 'high', 'low'),
-    ('black', 'black', 'low', 'low'),
-    ('gray', 'gray', 'mid', 'mid'),
-    ('white', 'black', 'low', 'high'),
+    ('white', 'white', 'high', 'high'),
+    ('gray', 'white', 'high', 'mid'),
+    ('white', 'gray', 'mid', 'high'),
     ('black', 'white', 'high', 'low'),
+    ('white', 'black', 'low', 'high'),
+    ('gray', 'gray', 'mid', 'mid'),
+    ('black', 'gray', 'high', 'low'),
+    ('gray', 'black', 'low', 'high'),
+    ('black', 'black', 'low', 'low'),
 ]
 
 
