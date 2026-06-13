@@ -1,4 +1,5 @@
 #include "Centroide.h"
+#include <math.h>
 
 // GLobal variables 
 static float Y1;
@@ -37,21 +38,40 @@ void Centroide_Init(void)
 }
 
 // Functions
-float Centroide(float y_low, float y_mid, float y_high){
-  DefuzzArgs Area_L = Area_Low(y_low);
-  DefuzzArgs Area_M = Area_Mid(y_mid);
-  DefuzzArgs Area_H = Area_High(y_high);
-  DefuzzArgs Area_LM = Area_InterLm(y_low, y_mid);
-  DefuzzArgs Area_MH = Area_InterMh(y_mid, y_high);
-  float num = Area_L.num + Area_M.num + Area_H.num + Area_LM.num + Area_MH.num;
-  float den = Area_L.den + Area_M.den + Area_H.den + Area_LM.den + Area_MH.den;
-  if(den == 0) return 0.0f; // Evitar división por cero
-  return num / den;
-}
+float Centroide(float y_low, float y_mid, float y_high)
+{
+    float num = 0.0f;
+    float den = 0.0f;
 
+    for(float x = 0.0f; x <= 100.0f; x += 0.1f)
+    {
+        float low =
+            fminf(y_low,
+                  FuzzyMembership(x, Low, TRAPZ_LOW));
+
+        float mid =
+            fminf(y_mid,
+                  FuzzyMembership(x, Mid, TRIANG));
+
+        float high =
+            fminf(y_high,
+                  FuzzyMembership(x, High, TRAPZ_HIGH));
+
+        float mu = fmaxf(low,
+                   fmaxf(mid, high));
+
+        num += x * mu;
+        den += mu;
+    }
+
+    if(den == 0.0f)
+        return 0.0f;
+
+    return num / den;
+}
 DefuzzArgs Area_Low(float y_low){
   DefuzzArgs Area_n_Centroid = {0.0f,0.0f};
-  float x_low = f_low(y_low);
+  float x_low = f_Low(y_low);
 
   float A_Sq_low = y_low*x_low;
   float A_T_low = y_low*(Low.R-x_low)/2;
@@ -104,7 +124,7 @@ DefuzzArgs Area_InterLm(float y_low, float y_mid){
   float y_lm = fmin(y_low,y_mid);
   
   float x_lm0 = f_Mid1(y_lm);  
-  float x_lm1 = f_low(y_lm);
+  float x_lm1 = f_Low(y_lm);
   float X_1 = f_Mid1(Y1); // Constante 
   float A_T1;
   if(y_lm<Y1) 
@@ -130,11 +150,11 @@ DefuzzArgs Area_InterMh(float y_mid, float y_high){
   float x_mh1 = f_Mid2(y_mh); 
   float X_2 = f_High(Y2);
   float T2;
-  if(y_mh<Y1) 
+  if(y_mh<Y2) 
      T2 = (x_mh1 - x_mh0)*(Y2-y_mh)/2.0f;
   else T2 = 0;
 
-  float TRight = (Mid.R-High.L * Y2)/2.0f;
+  float TRight = (Mid.R-High.L) * Y2 / 2.0f;
   float A_MidHigh = TRight-T2;
   
   // Centroides 

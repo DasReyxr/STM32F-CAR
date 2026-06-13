@@ -43,7 +43,6 @@ typedef struct {
     uint16_t Sensor[2];
     uint16_t PWM_Motor_LEFT;
     uint16_t PWM_Motor_RIGHT;
-
 } CarroData;
 
 // sensor [0] derecho, sensor[1] izquierdo 
@@ -53,7 +52,7 @@ typedef struct {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-#define PWM_PERIOD 4799
+#define PWM_PERIOD 4999
 
 /* USER CODE END EC */
 
@@ -72,6 +71,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define AIN1_Pin GPIO_PIN_2
+#define AIN1_GPIO_Port GPIOA
+#define AIN2_Pin GPIO_PIN_3
+#define AIN2_GPIO_Port GPIOA
+#define BIN1_Pin GPIO_PIN_4
+#define BIN1_GPIO_Port GPIOA
+#define BIN2_Pin GPIO_PIN_5
+#define BIN2_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

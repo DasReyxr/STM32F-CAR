@@ -4,10 +4,10 @@
 #include "FuzzyLogic.h"
 
 // Pendientes
-const float M_LOW  = -1.0f / (Low.R - Low.L);
-const float M_MID0 =  1.0f / (Mid.C - Mid.L);
-const float M_MID1 = -1.0f / (Mid.R - Mid.C);
-const float M_HIGH =  1.0f / (High.R - High.L);
+static const float M_LOW  = 1.0f / (Low.R - Low.L);
+static const float M_MID0 = 1.0f / (Mid.C - Mid.L);
+static const float M_MID1 = 1.0f / (Mid.R - Mid.C);
+static const float M_HIGH = 1.0f / (High.R - High.L);
 
 
 // ################## Functions ##################
@@ -27,31 +27,31 @@ DefuzzArgs Area_InterLm(float y_low, float y_mid);
 DefuzzArgs Area_InterMh(float y_mid, float y_high);
 
 
-float f_Low(float y){
+static inline float f_Low(float y){
     return (Low.R - y)/M_LOW;
 }
 
-float f_Mid1(float y){
+static inline float f_Mid1(float y){
     return (y - Mid.L)/M_MID0;
 }
-float f_Mid2(float y){
+static inline float f_Mid2(float y){
     return (Mid.R - y)/M_MID1;
 }
 
-float f_High(float y){
+static inline float f_High(float y){
     return (y-High.L)/M_HIGH;
 }
 
-float Centroid_T(float x0,float x1,float x2){
+static inline float Centroid_T(float x0,float x1,float x2){
     return (x0+x1+x2)/3.0f;
 }
 
-float Centroid_T_R(float x0, float x1)
+static inline float Centroid_T_R(float x0, float x1)
 {
     return x0 + ((x1 - x0) * (2.0f / 3.0f));
 }
 
-float Centroid_Sq(float x0, float x1)
+static inline float Centroid_Sq(float x0, float x1)
 {
     return (x0 + x1) / 2.0f;
 }
