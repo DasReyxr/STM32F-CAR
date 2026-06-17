@@ -126,8 +126,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
       Mamdani_MotorCommand(carro.Sensor[0], carro.Sensor[1], &cmd);
-      __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint32_t)(cmd.left*PWM_PERIOD/100.0f));
-      __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, (uint32_t)(cmd.right*PWM_PERIOD/100.0f));
+      __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint32_t)(cmd.left*0.5*PWM_PERIOD/100.0f));
+      __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, (uint32_t)(cmd.right*0.5*PWM_PERIOD/100.0f));
   }
   /* USER CODE END 3 */
 }

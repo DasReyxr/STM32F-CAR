@@ -60,19 +60,20 @@ float MamdaniRuleStrength(float a, float b)
 }
 
 //-------- Sensors --------
-float Black(float x) {
-  FuzzyArgs BlackArgs = {3900, 0, 4020};
-  return FuzzyMembership(x, BlackArgs, TRAPZ_LOW);
-}
 
+
+float White(float x) {
+  FuzzyArgs WhiteArgs = {3500, 0, 3600};
+  return FuzzyMembership(x, WhiteArgs, TRAPZ_LOW);
+}
 float Gray(float x) {
   FuzzyArgs GrayArgs = {3600, 3760, 3900};
   return FuzzyMembership(x, GrayArgs, TRIANG);
 }
 
-float White(float x) {
-  FuzzyArgs WhiteArgs = {3500, 0, 3600};
-  return FuzzyMembership(x, WhiteArgs, TRAPZ_HIGH);
+float Black(float x) {
+  FuzzyArgs BlackArgs = {3900, 0, 4020};
+  return FuzzyMembership(x, BlackArgs, TRAPZ_HIGH);
 }
 
 //-------- Motors --------

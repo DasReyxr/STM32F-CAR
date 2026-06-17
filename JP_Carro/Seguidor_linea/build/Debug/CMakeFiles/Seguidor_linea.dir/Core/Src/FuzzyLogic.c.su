@@ -4,9 +4,9 @@
 /home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:47:7:MamdaniAnd	16	static
 /home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:52:7:MamdaniOr	16	static
 /home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:57:7:MamdaniRuleStrength	16	static
-/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:63:7:Black	32	static
-/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:68:7:Gray	32	static
-/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:73:7:White	32	static
-/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:79:7:Lowf	16	static
-/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:83:7:Mediumf	16	static
-/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:87:7:Highf	16	static
+/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:65:7:White	32	static
+/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:69:7:Gray	32	static
+/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:74:7:Black	32	static
+/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:80:7:Lowf	16	static
+/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:84:7:Mediumf	16	static
+/home/kevin/Documents/carrorepo/STM32F-CAR/JP_Carro/Seguidor_linea/Core/Src/FuzzyLogic.c:88:7:Highf	16	static

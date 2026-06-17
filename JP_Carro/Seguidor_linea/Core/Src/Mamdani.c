@@ -11,19 +11,19 @@ static const MamdaniRule_t default_rules[] = {
 
 // Borde izquierdo (L en gris, R en blanco)
 // -> Ligeramente a la izquierda: reducir motor derecho
-{S_GRAY,  S_WHITE,  O_HIGH, O_MID,  1.0f},
+{S_GRAY,  S_WHITE,  O_HIGH, O_MID,  2.0f},
 
 // Borde derecho (L en blanco, R en gris)
 // -> Ligeramente a la derecha: reducir motor izquierdo
-{S_WHITE, S_GRAY,   O_MID,  O_HIGH, 1.0f},
+{S_WHITE, S_GRAY,   O_MID,  O_HIGH, 2.0f},
 
 // Desvío fuerte izquierda (L en negro, R en blanco)
 // -> Girar fuerte a la izquierda: motor L alto, motor R muy bajo
-{S_BLACK, S_WHITE,  O_HIGH, O_LOW,  1.0f},
+{S_BLACK, S_WHITE,  O_HIGH, O_LOW,  2.0f},
 
 // Desvío fuerte derecha (L en blanco, R en negro)
 // -> Girar fuerte a la derecha: motor L muy bajo, motor R alto
-{S_WHITE, S_BLACK,  O_LOW,  O_HIGH, 1.0f},
+{S_WHITE, S_BLACK,  O_LOW,  O_HIGH, 2.0f},
 
 // Ambos en borde (curva suave o línea gruesa) -> velocidad media
 {S_GRAY,  S_GRAY,   O_MID,  O_MID,  1.0f},
@@ -35,7 +35,7 @@ static const MamdaniRule_t default_rules[] = {
 {S_GRAY,  S_BLACK,  O_LOW,  O_HIGH, 1.0f},
 
 // Ambos en negro (perdió la línea completamente) -> detener
-{S_BLACK, S_BLACK,  O_LOW,  O_LOW,  0.0f},
+{S_BLACK, S_BLACK,  O_LOW,  O_HIGH,  1.0f},
 };
 
 const MamdaniRule_t* Mamdani_GetRules(size_t *count)
