@@ -32,7 +32,8 @@ flowchart LR
 
 ## 📷 Imagen del prototipo
 
-<img src="images/Diseño_Carro seguidor .png" width="500">
+<img width="685" height="331" alt="Diseño_Carro seguidor " src="https://github.com/user-attachments/assets/d90dedc1-77a2-4163-88c1-93caf5fdc698" />
+
 
 ![Carrito seguidor de línea](https://via.placeholder.com/900x500?text=Carrito+Seguidor+de+L%C3%ADnea)
 
