@@ -13,29 +13,39 @@ El sistema lee la señal de los sensores, identifica si el robot está ligeramen
 
 ## 🛠️ Diseño del sistema
 
+El sistema se basa en una secuencia clara de procesamiento:
+
+1. **Adquisición de datos**: se toman las lecturas de los dos sensores.
+2. **Difusión de entradas**: los valores obtenidos se difuminan para representar el grado de pertenencia a las variables difusas.
+3. **Reglas de Mamdani**: se aplican las reglas difusas para evaluar la acción de control.
+4. **Defuzzificación por centroide**: se obtiene un valor numérico que indica la corrección necesaria.
+5. **Actuación sobre los motores**: el resultado se envía al puente H para controlar el movimiento del carrito.
+
 ```mermaid
 flowchart LR
-    A[Sensor izquierdo] --> B[Procesamiento de señales]
+    A[Sensor izquierdo] --> B[Lecturas de entrada]
     C[Sensor derecho] --> B
-    B --> D[Control difuso]
-    D --> E[Control de motores]
-    E --> F[Motor izquierdo]
-    E --> G[Motor derecho]
+    B --> D[Difusificación]
+    D --> E[Reglas de Mamdani]
+    E --> F[Centroide]
+    F --> G[Control de motores]
+    G --> H[Motor izquierdo]
+    G --> I[Motor derecho]
 ```
 
 ### Componentes principales
-- **Microcontrolador:** STM32
-- **Sensores:** IR para detección de línea
+- **Microcontrolador:** BlackPill STM32F411CEU
+- **Sensores:** QTR-8A
+- **Puente H:** TB6612FNG
+- **Control:** lógica difusa basada en reglas de Mamdani
 - **Actuadores:** motores DC
-- **Control:** algoritmo difuso basado en reglas de Mamdani
-- **Fuente de alimentación:** sistema de batería / fuente adecuada para el carrito
+- **Fuente de alimentación:** batería o fuente adecuada para el sistema
 
 ## 📷 Imagen del prototipo
 
-<img width="685" height="331" alt="Diseño_Carro seguidor " src="https://github.com/user-attachments/assets/d90dedc1-77a2-4163-88c1-93caf5fdc698" />
+A continuación se muestra una vista del prototipo desarrollado para el carrito seguidor de línea:
 
-
-![Carrito seguidor de línea](https://via.placeholder.com/900x500?text=Carrito+Seguidor+de+L%C3%ADnea)
+<img width="685" height="331" alt="Diseño del carrito seguidor de línea" src="https://github.com/user-attachments/assets/d90dedc1-77a2-4163-88c1-93caf5fdc698" />
 
 ## 🎥 Demo
 Aquí puedes ver una demostración del funcionamiento del carrito:
