@@ -1,22 +1,22 @@
 # Carrito Seguidor de Línea con Lógica Difusa
 
-Este proyecto presenta un **carrito autónomo seguidor de línea** basado en un microcontrolador STM32 y un sistema de control por **lógica difusa (Fuzzy Logic)**. El objetivo es detectar la posición de la línea y ajustar la velocidad de los motores para mantener el seguimiento de forma estable y eficiente.
+Este proyecto presenta un **carrito autónomo seguidor de línea** basado en un microcontrolador STM32 y un sistema de control por **lógica difusa (Fuzzy Logic)**. El objetivo es detectar la posición de la línea y ajustar la velocidad de los motores para mantener el seguimiento de manera estable y eficiente.
 
 ## ✨ Características principales
 - Seguimiento automático de línea mediante sensores infrarrojos.
-- Control adaptativo usando lógica difusa.
+- Control adaptativo mediante lógica difusa.
 - Implementación sobre plataforma STM32.
 - Diseño orientado a demostración, pruebas y desarrollo académico.
 
 ## 🧠 ¿Cómo funciona?
-El sistema lee la señal de los sensores, identifica si el robot está ligeramente a la izquierda, derecha o sobre la línea, y genera una respuesta para corregir el movimiento de los motores.
+El sistema lee la señal de los sensores, identifica si el carrito está ligeramente a la izquierda, a la derecha o sobre la línea, y genera una respuesta para corregir el movimiento de los motores, manteniéndose sobre la trayectoria.
 
 ## 🛠️ Diseño del sistema
 
-El sistema se basa en una secuencia clara de procesamiento:
+El sistema sigue una secuencia clara de procesamiento:
 
 1. **Adquisición de datos**: se toman las lecturas de los dos sensores.
-2. **Difusión de entradas**: los valores obtenidos se difuminan para representar el grado de pertenencia a las variables difusas.
+2. **Difuminación de entradas**: los valores obtenidos se difuminan para representar el grado de pertenencia a las variables difusas.
 3. **Reglas de Mamdani**: se aplican las reglas difusas para evaluar la acción de control.
 4. **Defuzzificación por centroide**: se obtiene un valor numérico que indica la corrección necesaria.
 5. **Actuación sobre los motores**: el resultado se envía al puente H para controlar el movimiento del carrito.
