@@ -1,0 +1,10 @@
+11:58:27 **** Incremental Build of configuration Debug for project Inversor_conmutation ****
+make -j8 all 
+arm-none-eabi-size  Inversor_conmutation.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10968	     12	   1716	  12696	   3198	Inversor_conmutation.elf
+Finished building: default.size.stdout
+ 
+
+11:58:27 Build Finished. 0 errors, 0 warnings. (took 66ms)
+

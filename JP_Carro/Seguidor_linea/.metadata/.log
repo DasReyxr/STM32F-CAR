@@ -10,3 +10,54 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64
 
 !ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-06-10 11:50:01.744
 !MESSAGE Started RMI Server, listening on port 41338
+!SESSION 2026-06-15 11:03:31.494 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-06-15 11:03:49.981
+!MESSAGE Log4j2 initialized with config file /home/rober/Documentos/Roberto/Universidad/Proyectos/Carrito_joshua/STM32F-CAR/JP_Carro/Seguidor_linea/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-06-15 11:03:55.119
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-06-15 11:05:15.744
+!MESSAGE Indexed 'Inversor_conmutation' (21 sources, 118 headers) in 5.37 sec: 11,984 declarations; 56,188 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.35%)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 13:59:18.914
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 5 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 13:59:18.914
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 13:59:18.915
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 5 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 13:59:18.915
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 14:09:06.632
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 6 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 14:09:06.632
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 14:09:06.634
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 6 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2026-06-15 14:09:06.635
+!MESSAGE Existing sessions are:
+!SESSION 2026-06-16 11:57:28.058 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-06-16 11:57:54.848
+!MESSAGE Log4j2 initialized with config file /home/rober/Documentos/Roberto/Universidad/Proyectos/Carrito_joshua/STM32F-CAR/JP_Carro/Seguidor_linea/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-06-16 11:58:01.636
+!MESSAGE Started RMI Server, listening on port 41337
