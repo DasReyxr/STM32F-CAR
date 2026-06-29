@@ -1,9 +1,4 @@
 (fp_lib_table
-  (version 7)
-  (lib (name "Librerias")(type "KiCad")(uri "C:/Users/dasre/Documents/Knowledge-db/ghFiles/STM32F-CAR/HW_PCB/Librerias")(options "")(descr ""))
-  (lib (name "NX5032GA-8")(type "KiCad")(uri "C:/Users/dasre/Documents/Knowledge-db/ghFiles/STM32F-CAR/HW_PCB/Librerias/NX5032GA-8.pretty")(options "")(descr ""))
-  (lib (name "TAJB226K016RNJ")(type "KiCad")(uri "C:/Users/dasre/Documents/Knowledge-db/ghFiles/STM32F-CAR/HW_PCB/Librerias/TAJB226K016RNJ.pretty")(options "")(descr ""))
-  (lib (name "NX5032GA-8.000M-STD-CSU-1")(type "KiCad")(uri "C:/Users/dasre/Documents/Knowledge-db/ghFiles/STM32F-CAR/HW_PCB/Librerias/NX5032GA-8.000M-STD-CSU-1.pretty")(options "")(descr ""))
-  (lib (name "MPU6050")(type "KiCad")(uri "C:/Users/dasre/Documents/Knowledge-db/ghFiles/STM32F-CAR/HW_PCB/Librerias/MPU6050.pretty")(options "")(descr ""))
-  (lib (name "6050_MPU_r0 ")(type "KiCad")(uri "C:/Users/dasre/Documents/Knowledge-db/ghFiles/STM32F-CAR/HW_PCB/Librerias/MPU6050/6050_MPU_r0 .pretty")(options "")(descr ""))
+	(version 7)
+	(lib (name "NX5032GA-8.000M-STD-CSU-1") (type "KiCad") (uri "/home/dasreyxr/wkn/Knowledge-db/ghfiles/STM32F-CAR/HW_PCB/Librerias/NX5032GA-8.000M-STD-CSU-1.pretty") (options "") (descr ""))
 )
