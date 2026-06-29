@@ -5175,6 +5175,16 @@
 	)
 	(wire
 		(pts
+			(xy 191.77 125.73) (xy 189.23 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6321138d-b438-467a-8acf-c5e7b20f33bf")
+	)
+	(wire
+		(pts
 			(xy 182.372 152.146) (xy 182.372 153.67)
 		)
 		(stroke
@@ -5572,6 +5582,16 @@
 			(type default)
 		)
 		(uuid "999585da-9f94-413b-b048-1beb4ed06706")
+	)
+	(wire
+		(pts
+			(xy 191.77 123.19) (xy 189.23 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a59096b-6f28-49a3-9188-2699bf876f30")
 	)
 	(wire
 		(pts
@@ -7073,6 +7093,30 @@
 			)
 		)
 	)
+	(global_label "TX"
+		(shape input)
+		(at 191.77 123.19 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5ddae382-b0a7-4a5b-a218-07a7f380ca07")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 196.9323 123.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "PB11"
 		(shape input)
 		(at 217.17 114.3 180)
@@ -7094,6 +7138,30 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+	)
+	(global_label "RX"
+		(shape input)
+		(at 191.77 125.73 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "63711910-c148-49bb-8493-8c58219beee0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 197.2347 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 	)
@@ -10063,6 +10131,86 @@
 			(project "Blue_pill"
 				(path "/45e4e8b9-0ed0-45ac-9243-1204418424c5"
 					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 184.15 125.73 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "69a6230c-a232-4f25-be54-bd12a5cf7957")
+		(property "Reference" "J7"
+			(at 184.15 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UART"
+			(at 184.15 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+			(at 184.15 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 184.15 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 184.15 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "9a6a8349-cf40-4eee-bb5c-51032e1312a5")
+		)
+		(pin "1"
+			(uuid "6f51b819-f245-4104-a5dc-2aeeded6a439")
+		)
+		(instances
+			(project "Blue_pill"
+				(path "/45e4e8b9-0ed0-45ac-9243-1204418424c5"
+					(reference "J7")
 					(unit 1)
 				)
 			)
