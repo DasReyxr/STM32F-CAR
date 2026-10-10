@@ -45,7 +45,7 @@ flowchart LR
 
 A continuación se muestra una vista del prototipo desarrollado para el carrito seguidor de línea:
 
-<img width="685" height="331" alt="Diseño del carrito seguidor de línea" src="https://github.com/user-attachments/assets/d90dedc1-77a2-4163-88c1-93caf5fdc698" />
+![Prototipo del carrito seguidor de línea](src/Diseño_Carro%20seguidor%20.png)
 
 ## 🎥 Demo
 Aquí puedes ver una demostración del funcionamiento del carrito:
